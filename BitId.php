@@ -36,6 +36,8 @@ $wgHooks['PersonalUrls'][] = 'efAddBitIdLinks';
 //$wgAutoloadClasses['ApiBitId'] = __DIR__ . '/ApiBitId.php';
 //$wgAPIModules['bitid'] = 'ApiBitId';
 $wgExtensionMessagesFiles['BitId'] = __DIR__ . '/BitId.i18n.php';
+$wgAutoloadClasses['SpecialBitId'] = __DIR__ . '/SpecialBitId.php';
+$wgSpecialPages['BitId'] = 'SpecialBitId';
 
 $wgResourceModules['ext.bitid'] = array(
 	//'scripts' => array( 'js/persona.js', 'js/bitid_hooks.js' ),
@@ -83,9 +85,10 @@ function efAddBitIdLogin( $template ) {
 	$out = $context->getOutput();
 	$out->addModules( 'ext.bitid' );
 
-	$label = wfMessage( 'bitid-login' )->escaped();
-	$bitidButton = Html::input( 'wpBitId', $label, 'button', array( 'id' => 'wpBitId' ) );
-	$template->set( 'header', $bitidButton );
+	$label = wfMessage( 'bitid' )->escaped();
+	$href = Title::newFromText('Special:BitId')->getFullURL();
+	$bitidLink = Html::element( 'a', array('href' => $href, 'class' => 'mw-ui-button mw-ui-primary'), $label);
+	$template->set( 'header', $bitidLink );
 	return true;
 }
 
@@ -103,8 +106,8 @@ function efAddBitIdLinks( array &$personal_urls, Title $title ) {
 		$out->addModules( 'ext.bitid' );
 
 		$personal_urls['bitidlogin'] = array(
-			'text' => wfMessage( 'bitid-login' ),
-			'href' => '#',
+			'text' => wfMessage( 'bitid' ),
+			'href' => Title::newFromText('Special:BitId')->getFullURL(),
 			'active' => $title->isSpecial( 'Userlogin' )
 		);
 	}

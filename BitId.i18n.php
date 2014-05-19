@@ -21,7 +21,7 @@
 $messages = array();
 
 $messages['en'] = array(
-	'bitid-login' => 'Login with BitID',
+	'bitid' => 'Login with BitID',
 	'bitid-desc' => 'Allows users to log in with their BitID account.'
 );
 
@@ -30,7 +30,7 @@ $messages['en'] = array(
  * @author Shirayuki
  */
 $messages['qqq'] = array(
-	'bitid-login' => 'Label for the BitID login link and button',
+	'bitid' => 'Label for the BitID login link and button',
 	'bitid-desc' => '{{desc|name=BitID|url=http://www.mediawiki.org/wiki/Extension:BitID}}',
 );
 
@@ -38,7 +38,7 @@ $messages['qqq'] = array(
  * @author Xuacu
  */
 $messages['ast'] = array(
-	'bitid-login' => 'Aniciar sesión con BitID',
+	'bitid' => 'Aniciar sesión con BitID',
 	'bitid-desc' => 'Permite que los usuarios anicien sesión cola so cuenta de BitID',
 );
 
@@ -46,7 +46,7 @@ $messages['ast'] = array(
  * @author Wizardist
  */
 $messages['be-tarask'] = array(
-	'bitid-login' => 'Увайсьці праз BitID',
+	'bitid' => 'Увайсьці праз BitID',
 	'bitid-desc' => 'Дазваляе ўваходзіць праз рахунак у BitID.',
 );
 
@@ -54,7 +54,7 @@ $messages['be-tarask'] = array(
  * @author Mormegil
  */
 $messages['cs'] = array(
-	'bitid-login' => 'Přihlásit pomocí BitID',
+	'bitid' => 'Přihlásit pomocí BitID',
 	'bitid-desc' => 'Umožňuje uživatelům přihlásit se pomocí účtu BitID.',
 );
 
@@ -62,7 +62,7 @@ $messages['cs'] = array(
  * @author Metalhead64
  */
 $messages['de'] = array(
-	'bitid-login' => 'Mit BitID anmelden',
+	'bitid' => 'Mit BitID anmelden',
 	'bitid-desc' => 'Ermöglicht es Benutzern, sich mit ihrem BitID-Konto anzumelden',
 );
 
@@ -70,7 +70,7 @@ $messages['de'] = array(
  * @author Michawiki
  */
 $messages['dsb'] = array(
-	'bitid-login' => 'Pśizjawjenje z BitID',
+	'bitid' => 'Pśizjawjenje z BitID',
 	'bitid-desc' => 'Zmóžnja wužywarjam se z jich kontom BitID pśizjawiś.',
 );
 
@@ -78,7 +78,7 @@ $messages['dsb'] = array(
  * @author Armando-Martin
  */
 $messages['es'] = array(
-	'bitid-login' => 'Iniciar sesión con BitID',
+	'bitid' => 'Iniciar sesión con BitID',
 	'bitid-desc' => 'Permite a los usuarios iniciar sesión con su cuenta de BitID',
 );
 
@@ -86,14 +86,14 @@ $messages['es'] = array(
  * @author Silvonen
  */
 $messages['fi'] = array(
-	'bitid-login' => 'Kirjaudu BitID-tunnuksella',
+	'bitid' => 'Kirjaudu BitID-tunnuksella',
 );
 
 /** French (français)
  * @author Gomoko
  */
 $messages['fr'] = array(
-	'bitid-login' => 'Connexion avec BitID',
+	'bitid' => 'Connexion avec BitID',
 	'bitid-desc' => 'Permet aux utilisateurs de se connecter avec leur compte BitID.',
 );
 
@@ -101,7 +101,7 @@ $messages['fr'] = array(
  * @author Toliño
  */
 $messages['gl'] = array(
-	'bitid-login' => 'Rexistro con BitID',
+	'bitid' => 'Rexistro con BitID',
 	'bitid-desc' => 'Permite aos usuarios rexistrarse coa súa conta de BitID',
 );
 
@@ -109,7 +109,7 @@ $messages['gl'] = array(
  * @author Amire80
  */
 $messages['he'] = array(
-	'bitid-login' => 'כניסה באמצעות פרסונה',
+	'bitid' => 'כניסה באמצעות פרסונה',
 	'bitid-desc' => 'הוספת אפשרות להיכנס באמצעות חשבון מוזילה פרסונה.',
 );
 
@@ -117,7 +117,7 @@ $messages['he'] = array(
  * @author Michawiki
  */
 $messages['hsb'] = array(
-	'bitid-login' => 'Přizjewjenje z BitID',
+	'bitid' => 'Přizjewjenje z BitID',
 	'bitid-desc' => 'Zmóžnja wužiwarjam so z jich kontom BitID přizjewić.',
 );
 
@@ -125,7 +125,7 @@ $messages['hsb'] = array(
  * @author Beta16
  */
 $messages['it'] = array(
-	'bitid-login' => 'Accedi con BitID',
+	'bitid' => 'Accedi con BitID',
 	'bitid-desc' => "Permette agli utenti di effettuare l'accesso tramite la loro l'utenza BitID.",
 );
 
@@ -133,7 +133,7 @@ $messages['it'] = array(
  * @author Shirayuki
  */
 $messages['ja'] = array(
-	'bitid-login' => 'BitID でログイン',
+	'bitid' => 'BitID でログイン',
 	'bitid-desc' => '利用者が自分の BitID アカウントでログインできるようにする。',
 );
 
@@ -141,7 +141,7 @@ $messages['ja'] = array(
  * @author 아라
  */
 $messages['ko'] = array(
-	'bitid-login' => 'BitID로 로그인',
+	'bitid' => 'BitID로 로그인',
 	'bitid-desc' => '사용자가 자신의 BitID 계정으로 로그인할 수 있습니다',
 );
 
@@ -149,7 +149,7 @@ $messages['ko'] = array(
  * @author Purodha
  */
 $messages['ksh'] = array(
-	'bitid-login' => 'Met <i lang="en>BitID</i> enlogge',
+	'bitid' => 'Met <i lang="en>BitID</i> enlogge',
 	'bitid-desc' => 'Löht Metmaacher övver iehre Zohjang zom <i lang="en">BitID</i> vun enlogge.',
 );
 
@@ -157,7 +157,7 @@ $messages['ksh'] = array(
  * @author Robby
  */
 $messages['lb'] = array(
-	'bitid-login' => 'Mat BitID aloggen',
+	'bitid' => 'Mat BitID aloggen',
 	'bitid-desc' => 'Erlaabt et Benotzer mat hirem BitID Benotzerkont anzeloggen',
 );
 
@@ -165,7 +165,7 @@ $messages['lb'] = array(
  * @author Iwan Novirion
  */
 $messages['min'] = array(
-	'bitid-login' => 'Login jo BitID',
+	'bitid' => 'Login jo BitID',
 	'bitid-desc' => 'Izinkan pangguno untuak login jo akun BitID.',
 );
 
@@ -173,7 +173,7 @@ $messages['min'] = array(
  * @author Bjankuloski06
  */
 $messages['mk'] = array(
-	'bitid-login' => 'Најава со BitID',
+	'bitid' => 'Најава со BitID',
 	'bitid-desc' => 'Овозможува корисниците да се најавуваат со нивната сметка на BitID.',
 );
 
@@ -182,7 +182,7 @@ $messages['mk'] = array(
  * @author Wiki13
  */
 $messages['nl'] = array(
-	'bitid-login' => 'Aanmelden met BitID',
+	'bitid' => 'Aanmelden met BitID',
 	'bitid-desc' => 'Maakt het mogelijk om gebruikers aan te laten melden met hun BitIDgebruiker.',
 );
 
@@ -191,7 +191,7 @@ $messages['nl'] = array(
  * @author Dragonòt
  */
 $messages['pms'] = array(
-	'bitid-login' => 'Intré ant ël sistema con BitID',
+	'bitid' => 'Intré ant ël sistema con BitID',
 	'bitid-desc' => "A përmëtt a j'utent d'intré ant ël sistema con sò cont BitID.",
 );
 
@@ -199,7 +199,7 @@ $messages['pms'] = array(
  * @author Fúlvio
  */
 $messages['pt'] = array(
-	'bitid-login' => 'Entrar com BitID',
+	'bitid' => 'Entrar com BitID',
 	'bitid-desc' => 'Permite que os utilizadores iniciem sessão com sua conta do BitID.',
 );
 
@@ -207,7 +207,7 @@ $messages['pt'] = array(
  * @author Gion-andri
  */
 $messages['rm'] = array(
-	'bitid-login' => "S'annunziar cun BitID",
+	'bitid' => "S'annunziar cun BitID",
 	'bitid-desc' => "Lubescha ad utilisaders da s'annunziar cun lur contos da BitID.",
 );
 
@@ -215,14 +215,14 @@ $messages['rm'] = array(
  * @author Minisarm
  */
 $messages['ro'] = array(
-	'bitid-login' => 'Autentificare cu BitID',
+	'bitid' => 'Autentificare cu BitID',
 );
 
 /** tarandíne (tarandíne)
  * @author Joetaras
  */
 $messages['roa-tara'] = array(
-	'bitid-login' => 'Tràse cu BitID',
+	'bitid' => 'Tràse cu BitID',
 	'bitid-desc' => "Permette a l'utinde de trasè cu 'u cunde lore de BitID.",
 );
 
@@ -230,7 +230,7 @@ $messages['roa-tara'] = array(
  * @author Okras
  */
 $messages['ru'] = array(
-	'bitid-login' => 'Войти, используя BitID',
+	'bitid' => 'Войти, используя BitID',
 	'bitid-desc' => 'Позволяет пользователям входить с помощью их учётной записи в BitID.',
 );
 
@@ -238,14 +238,14 @@ $messages['ru'] = array(
  * @author පසිඳු කාවින්ද
  */
 $messages['si'] = array(
-	'bitid-login' => 'පුද්ගලතාව සමඟ ප්‍රවිෂ්ට වන්න',
+	'bitid' => 'පුද්ගලතාව සමඟ ප්‍රවිෂ්ට වන්න',
 );
 
 /** Swedish (svenska)
  * @author WikiPhoenix
  */
 $messages['sv'] = array(
-	'bitid-login' => 'Logga in med BitID',
+	'bitid' => 'Logga in med BitID',
 	'bitid-desc' => 'Låter användare att logga in med sitt BitID-konto.',
 );
 
@@ -253,7 +253,7 @@ $messages['sv'] = array(
  * @author Ата
  */
 $messages['uk'] = array(
-	'bitid-login' => 'Увійти, використовуючи BitID',
+	'bitid' => 'Увійти, використовуючи BitID',
 	'bitid-desc' => 'Дозволяє користувачам входити з допомогою облікового запису BitID.',
 );
 
@@ -261,7 +261,7 @@ $messages['uk'] = array(
  * @author Yfdyh000
  */
 $messages['zh-hans'] = array(
-	'bitid-login' => '用 BitID 登录',
+	'bitid' => '用 BitID 登录',
 	'bitid-desc' => '允许用户使用他们的 BitID 帐户登录。',
 );
 
@@ -269,6 +269,6 @@ $messages['zh-hans'] = array(
  * @author Justincheng12345
  */
 $messages['zh-hant'] = array(
-	'bitid-login' => '以BitID登入',
+	'bitid' => '以BitID登入',
 	'bitid-desc' => '容許用戶使用BitID帳戶登入。',
 );
