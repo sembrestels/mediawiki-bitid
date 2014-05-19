@@ -1,6 +1,6 @@
-== BitID for MediaWiki ==
+## BitID for MediaWiki
 
-=== Installation ===
+### Installation
 
 Add the following line in your `LocalSettings.php`.
 
