@@ -27,7 +27,6 @@ if (extension_loaded('gmp')) {
 class BitID {
 
     private $_scheme = "bitid";
-    private $_qrservice = "https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=";
 
     private $_nonce;
     private $_callback;
@@ -79,7 +78,11 @@ class BitID {
      * @return string
      */
     public function qrCode($uri) {
-        return $this->_qrservice . urlencode($uri);
+		ob_start();
+		QRCode::png($uri, null, null, 7, 7);
+		$img = "data:image/png;base64,".base64_encode(ob_get_contents());
+		ob_end_clean();
+		return $img;
     }
 
     /**
@@ -378,5 +381,10 @@ spl_autoload_register(function($f) {
     $utilFile = $base . "classes/util/" . $f . ".php";
     if (file_exists($utilFile)) {
         require_once $utilFile;
+    }
+
+    $qrFile = dirname(__FILE__)."/phpqrcode.php";
+    if ($f == "QRCode") {
+       require_once $qrFile;
     }
 });
