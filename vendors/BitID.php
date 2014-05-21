@@ -109,7 +109,9 @@ class BitID {
             $this->_secure = false;
         }
 
-        return $this->_scheme . '://' . $this->_callback . '?x=' . $this->_nonce . (!$this->_secure?'&u=1':'');
+        $arg_separator = strpos($callback, '?') !== false ? '&' : '?';
+
+        return $this->_scheme . '://' . $this->_callback . $arg_separator . 'x=' . $this->_nonce . (!$this->_secure?'&u=1':'');
     }
 
     /**

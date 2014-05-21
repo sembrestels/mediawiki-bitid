@@ -36,6 +36,16 @@ class SpecialBitId extends SpecialPage {
 		$request = $this->getRequest();
 		$output = $this->getOutput();
 		$this->setHeaders();
+		$headers = getallheaders();
+		
+		if ($request->getText('uri') || $headers['Content-Type'] == 'application/json') {
+			$this->callback(array(
+				uri => $request->getText('uri'),
+				address => $request->getText('address'),
+				signature => $request->getText('signature'),
+			));
+			$output->redirect();
+		}
 		
 		$bitid = new BitID();
 		$nonce = $bitid->generateNonce();
@@ -79,5 +89,34 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 		$output->addWikiText("Back to [[Special:BitId#qr-code | QR code]].");
 		
 		$output->addHTML('</span>');
+	}
+	
+	private function callback($variables) {
+		$bitid = new BitID();
+
+		$post_data = json_decode(file_get_contents('php://input'), true);
+		// SIGNED VIA PHONE WALLET (data is send as payload)
+		if($post_data!==null) {
+			$variables = $post_data;
+		}
+
+		// ALL THOSE VARIABLES HAVE TO BE SANITIZED !
+
+		$signValid = $bitid->isMessageSignatureValidSafe(@$variables['address'], @$variables['signature'], @$variables['uri'], true);
+		$nonce = $bitid->extractNonce($variables['uri']);
+		if($signValid) {
+			//require_once dirname(__FILE__) . "/DAO.php";
+			//$dao = new DAO();
+			//$dao->update($nonce, $variables['address']);
+
+			// SIGNED VIA PHONE WALLET (data was sent as payload)
+			if($post_data!==null) {
+				//DO NOTHING
+			} else {
+				// SIGNED MANUALLY (data is stored in $_POST+$_REQUEST vs payload)
+				// SHOW SOMETHING PRETTY TO THE USER
+				// TODO login()
+			}
+		}
 	}
 }
