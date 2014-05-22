@@ -38,7 +38,9 @@ class SpecialBitId extends SpecialPage {
 		$this->setHeaders();
 		$headers = getallheaders();
 		
-		if ($request->getText('uri') || isset($headers['Content-Type']) && $headers['Content-Type'] == 'application/json') {
+		if ($request->getText('ajax')) {
+			$this->ajax();
+		} elseif ($request->getText('uri') || isset($headers['Content-Type']) && $headers['Content-Type'] == 'application/json') {
 			$this->callback(array(
 				uri => $request->getText('uri'),
 				address => $request->getText('address'),
@@ -47,19 +49,19 @@ class SpecialBitId extends SpecialPage {
 			$output->redirect(Title::newFromText('Special:BitId')->getFullURL());
 		}
 		
-		$bitid = new BitID();
-		$nonce = $bitid->generateNonce();
+		$this->bitid = new BitID();
+		$nonce = $this->bitid->generateNonce();
 
 		$bitid_uri = Title::newFromText('Special:BitId')->getFullURL();
-		$bitid_uri = $bitid->buildURI($bitid_uri, $nonce);
-		
-		$bitid_qr = $bitid->qrCode($bitid_uri);
+		$bitid_uri = $this->bitid->buildURI($bitid_uri, $nonce);
 
-		$this->main_view($output, $bitid_uri, $bitid_qr);
+		$this->main_view($output, $bitid_uri);
 		$this->manual_view($output, $bitid_uri);
 	}
 	
-	private function main_view($output, $bitid_uri, $bitid_qr) {
+	private function main_view($output, $bitid_uri) {
+	
+		$bitid_qr = $this->bitid->qrCode($bitid_uri);
 	
 		$output->addHTML('<span id="qr-code">');
 		
@@ -71,6 +73,8 @@ You can also click on the QRcode if you have a BitID enabled desktop wallet.");
 "<a href=\"$bitid_uri\"><img alt=\"Click on QRcode to activate compatible desktop wallet\" border=\"0\" src=\"$bitid_qr\" /></a>");
 
 		$output->addWikiText("No compatible wallet? Use [[Special:BitId#manual-signing | manual signing]].");
+		
+		$output->addHTML(HTML::hidden('nonce', $this->bitid->extractNonce($bitid_uri)));
 		
 		$output->addHTML('</span>');
 	}
@@ -107,7 +111,6 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 	}
 	
 	private function callback($variables) {
-		$bitid = new BitID();
 
 		$post_data = json_decode(file_get_contents('php://input'), true);
 		// SIGNED VIA PHONE WALLET (data is send as payload)
@@ -117,8 +120,8 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 
 		// ALL THOSE VARIABLES HAVE TO BE SANITIZED !
 
-		$signValid = $bitid->isMessageSignatureValidSafe(@$variables['address'], @$variables['signature'], @$variables['uri'], true);
-		$nonce = $bitid->extractNonce($variables['uri']);
+		$signValid = $this->bitid->isMessageSignatureValidSafe(@$variables['address'], @$variables['signature'], @$variables['uri'], true);
+		$nonce = $this->bitid->extractNonce($variables['uri']);
 		$signValid = true; // For testing porpouses
 		if($signValid) {
 			//require_once dirname(__FILE__) . "/DAO.php";
@@ -131,8 +134,27 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 			} else {
 				// SIGNED MANUALLY (data is stored in $_POST+$_REQUEST vs payload)
 				// SHOW SOMETHING PRETTY TO THE USER
-				// TODO login()
+				$this->login();
 			}
 		}
+	}
+	
+	private function ajax() {
+		//require_once dirname(__FILE__) . "/DAO.php";
+		//$dao = new DAO();
+		// check if this nonce is logged or not
+		//$address = $dao->address($_POST['nonce'], @$_SERVER['REMOTE_ADDR']);
+		$address = false;
+		if($address!==false) {
+			// Create session so the user could log in
+			$this->login();
+		}
+		//return address/false to tell the VIEW it could log in now or not
+		echo json_encode($address);
+		exit();
+	}
+	
+	private function login() {
+	
 	}
 }
