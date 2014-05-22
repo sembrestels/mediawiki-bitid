@@ -40,7 +40,7 @@ $wgAutoloadClasses['SpecialBitId'] = __DIR__ . '/SpecialBitId.php';
 $wgSpecialPages['BitId'] = 'SpecialBitId';
 
 $wgResourceModules['ext.bitid'] = array(
-	//'scripts' => array( 'js/persona.js', 'js/bitid_hooks.js' ),
+	'scripts' => array('js/bitid_hooks.js'),
 	'styles' => array(),
 	'messages' => array(),
 	'dependencies' => array( 'mediawiki.api', 'mediawiki.Title' ),

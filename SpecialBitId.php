@@ -38,13 +38,13 @@ class SpecialBitId extends SpecialPage {
 		$this->setHeaders();
 		$headers = getallheaders();
 		
-		if ($request->getText('uri') || $headers['Content-Type'] == 'application/json') {
+		if ($request->getText('uri') || isset($headers['Content-Type']) && $headers['Content-Type'] == 'application/json') {
 			$this->callback(array(
 				uri => $request->getText('uri'),
 				address => $request->getText('address'),
 				signature => $request->getText('signature'),
 			));
-			$output->redirect();
+			$output->redirect(Title::newFromText('Special:BitId')->getFullURL());
 		}
 		
 		$bitid = new BitID();
@@ -86,7 +86,22 @@ Please sign the challenge in the box below using the private key of this Bitcoin
 
 Cumbersome. Yep. Much better with a simple scan or click using a compatible wallet :)");
 
+		$action_uri = Title::newFromText('Special:BitId')->getFullURL();
+		$output->addHTML("<form action=\"$action_uri\">");
+
+		$output->addHTML('<p>'.HTML::input('uri', $bitid_uri, 'text', array('readonly' => 'readonly', 'style' => 'width:450px')).'</p>');
+		
+		$output->addHTML('<p><label>Address</label><br/>'.HTML::input('address', null, null, array('placeholder' => 'Enter your public bitcoin address', 'style' => 'width:450px')).'</p>');
+		
+		$output->addHTML('<p><label>Signature</label><br/>'.HTML::input('signature', null, null, array('placeholder' => 'Enter the signature', 'style' => 'width:450px')).'</p>');
+		
+		$output->addHTML(HTML::hidden('title', 'Special:BitId'));
+
+		$output->addHTML('<p>'.HTML::input('signin', 'Sign in!', 'submit').'</p>');
+
 		$output->addWikiText("Back to [[Special:BitId#qr-code | QR code]].");
+		
+		$output->addHTML('</form>');
 		
 		$output->addHTML('</span>');
 	}
@@ -104,6 +119,7 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 
 		$signValid = $bitid->isMessageSignatureValidSafe(@$variables['address'], @$variables['signature'], @$variables['uri'], true);
 		$nonce = $bitid->extractNonce($variables['uri']);
+		$signValid = true; // For testing porpouses
 		if($signValid) {
 			//require_once dirname(__FILE__) . "/DAO.php";
 			//$dao = new DAO();
