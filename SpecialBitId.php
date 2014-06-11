@@ -52,8 +52,8 @@ class SpecialBitId extends SpecialPage {
 		$this->bitid = new BitID();
 		$nonce = $this->bitid->generateNonce();
 
-		$bitid_uri = Title::newFromText('Special:BitId')->getFullURL();
-		$bitid_uri = $this->bitid->buildURI($bitid_uri, $nonce);
+		$bitid_callback_uri = Title::newFromText('Special:BitId')->getFullURL();
+		$bitid_uri = $this->bitid->buildURI($bitid_callback_uri, $nonce);
 
 		$this->main_view($output, $bitid_uri);
 		$this->manual_view($output, $bitid_uri);
@@ -112,6 +112,7 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 	
 	private function callback($variables) {
 
+		header('Access-Control-Allow-Origin: *');
 		$post_data = json_decode(file_get_contents('php://input'), true);
 		// SIGNED VIA PHONE WALLET (data is send as payload)
 		if($post_data!==null) {
