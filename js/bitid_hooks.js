@@ -15,8 +15,8 @@ jQuery(function($) {
 			var r = new XMLHttpRequest();
 			r.open("POST", location.href, true);
 			r.onreadystatechange = function () {
-			if (r.readyState != 4 || r.status != 200) return;
-				if(r.responseText!='false') {
+				if (r.readyState != 4 || r.status != 200) return;
+				if(r.responseText!='null') {
 					window.location = "";
 				}
 			};

@@ -48,6 +48,8 @@ $wgResourceModules['ext.bitid'] = array(
 	'remoteExtPath' => 'BitId'
 );
 
+$wgHooks['LoadExtensionSchemaUpdates'][] = 'efCreateSqlTable';
+
 /**
  * Add the BitID module to the OutputPage.
  *
@@ -111,5 +113,11 @@ function efAddBitIdLinks( array &$personal_urls, Title $title ) {
 			'active' => $title->isSpecial( 'Userlogin' )
 		);
 	}
+	return true;
+}
+
+function efCreateSqlTable( DatabaseUpdater $updater ) {
+	$updater->addExtensionTable( 'nonces',
+		dirname( __FILE__ ) . '/scheme/nonces.sql', true );
 	return true;
 }

@@ -31,6 +31,7 @@ require_once dirname(__FILE__) . "/vendors/BitID.php";
 class SpecialBitId extends SpecialPage {
 	function __construct() {
 		parent::__construct('BitId');
+		$this->bitid = new BitID();
 	}
 	function execute($par) {
 		$request = $this->getRequest();
@@ -42,18 +43,18 @@ class SpecialBitId extends SpecialPage {
 			$this->ajax();
 		} elseif ($request->getText('uri') || isset($headers['Content-Type']) && $headers['Content-Type'] == 'application/json') {
 			$this->callback(array(
-				uri => $request->getText('uri'),
-				address => $request->getText('address'),
-				signature => $request->getText('signature'),
+				'uri' => $request->getText('uri'),
+				'address' => $request->getText('address'),
+				'signature' => $request->getText('signature'),
 			));
 			$output->redirect(Title::newFromText('Special:BitId')->getFullURL());
 		}
-		
-		$this->bitid = new BitID();
-		$nonce = $this->bitid->generateNonce();
+
+		$nonce = (isset($_SESSION['bitid_nonce']))? $_SESSION['bitid_nonce'] : $this->bitid->generateNonce();
 
 		$bitid_callback_uri = Title::newFromText('Special:BitId')->getFullURL();
 		$bitid_uri = $this->bitid->buildURI($bitid_callback_uri, $nonce);
+		$this->save_nonce($nonce);
 
 		$this->main_view($output, $bitid_uri);
 		$this->manual_view($output, $bitid_uri);
@@ -121,13 +122,12 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 
 		// ALL THOSE VARIABLES HAVE TO BE SANITIZED !
 
-		$signValid = $this->bitid->isMessageSignatureValidSafe(@$variables['address'], @$variables['signature'], @$variables['uri'], true);
-		$nonce = $this->bitid->extractNonce($variables['uri']);
+		$signValid = $this->bitid->isMessageSignatureValidSafe($variables['address'], $variables['signature'], $variables['uri'], true);
+		$nonce = $this->bitid->extractNonce(urldecode($variables['uri']));
 		$signValid = true; // For testing porpouses
 		if($signValid) {
-			//require_once dirname(__FILE__) . "/DAO.php";
-			//$dao = new DAO();
-			//$dao->update($nonce, $variables['address']);
+			$dbw = wfGetDB(DB_MASTER);
+			$dbw->update('nonces', array('address' => $variables['address']), array('nonce' => $nonce));
 
 			// SIGNED VIA PHONE WALLET (data was sent as payload)
 			if($post_data!==null) {
@@ -141,11 +141,12 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 	}
 	
 	private function ajax() {
-		//require_once dirname(__FILE__) . "/DAO.php";
-		//$dao = new DAO();
 		// check if this nonce is logged or not
-		//$address = $dao->address($_POST['nonce'], @$_SERVER['REMOTE_ADDR']);
-		$address = false;
+		$dbr = wfGetDB(DB_SLAVE);
+		$_address = $dbr->select('nonces', array('address'), array('nonce' => $_POST['nonce']));
+		foreach ($_address as $addr) {
+			$address = $addr->address;
+		}
 		if($address!==false) {
 			// Create session so the user could log in
 			$this->login();
@@ -156,6 +157,12 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 	}
 	
 	private function login() {
+		unset($_SESSION['bitid_nonce']);
+	}
 	
+	private function save_nonce($nonce) {
+		$_SESSION['bitid_nonce'] = $nonce;
+		$dbw = wfGetDB( DB_MASTER );
+		$dbw->insert('nonces', array('nonce'=> $nonce), __METHOD__, array('IGNORE'));
 	}
 }
