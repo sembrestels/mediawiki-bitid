@@ -30,14 +30,20 @@ $wgExtensionCredits['other'][] = array(
 
 $wgBitIdLoginAnywhere = true;
 
-$wgHooks['BeforePageDisplay'][] = 'efAddBitIdModule';
-$wgHooks['UserLoginForm'][] = 'efAddBitIdLogin';
-$wgHooks['PersonalUrls'][] = 'efAddBitIdLinks';
+$wgHooks['PersonalUrls'][] = 'BitIdHooks::onPersonalUrls';
+$wgHooks['BeforePageDisplay'][] = 'BitIdHooks::onBeforePageDisplay';
+$wgHooks['SpecialPage_initList'][] = 'BitIdHooks::onSpecialPage_initList';
+$wgHooks['LoadExtensionSchemaUpdates'][] = 'BitIdHooks::onLoadExtensionSchemaUpdates';
+$wgHooks['DeleteAccount'][] = 'BitIdHooks::onDeleteAccount';
+$wgHooks['MergeAccountFromTo'][] = 'BitIdHooks::onMergeAccountFromTo';
+$wgHooks['GetPreferences'][] = 'BitIdHooks::onGetPreferences';
+
 //$wgAutoloadClasses['ApiBitId'] = __DIR__ . '/ApiBitId.php';
 //$wgAPIModules['bitid'] = 'ApiBitId';
 $wgExtensionMessagesFiles['BitId'] = __DIR__ . '/BitId.i18n.php';
-$wgAutoloadClasses['SpecialBitId'] = __DIR__ . '/SpecialBitId.php';
-$wgSpecialPages['BitId'] = 'SpecialBitId';
+$wgAutoloadClasses['SpecialBitIdLogin'] = __DIR__ . '/SpecialBitIdLogin.php';
+$wgAutoloadClasses['BitIdHooks'] = __DIR__ . '/BitId.hooks.php';
+$wgSpecialPages['BitIdLogin'] = 'SpecialBitIdLogin';
 
 $wgResourceModules['ext.bitid'] = array(
 	'scripts' => array('js/bitid_hooks.js'),
@@ -48,78 +54,32 @@ $wgResourceModules['ext.bitid'] = array(
 	'remoteExtPath' => 'BitId'
 );
 
-$wgHooks['LoadExtensionSchemaUpdates'][] = 'efCreateSqlTable';
+class BitId {
+	
+	/**
+	 * Find the user with the given bitid
+	 *
+	 * @param $user
+	 * @return array return the registered BitID addresses and registration timestamps (if available)
+	 */
+	public static function getUserBitIdInformation( $user ) {
+		$bitid_addrs_registration = array();
 
-/**
- * Add the BitID module to the OutputPage.
- *
- * @param &$out OutputPage object
- * @param &$skin Skin object
- */
-function efAddBitIdModule( OutputPage &$out, Skin &$skin ) {
-	global $wgBitIdLoginAnywhere;
-	if( !$wgBitIdLoginAnywhere ) {
-		return true;
-	} elseif( !isset( $_SESSION ) ) {
-		wfSetupSession();
+		if ( $user instanceof User && $user->getId() != 0 ) {
+			$dbr = wfGetDB( DB_SLAVE );
+			$res = $dbr->select(
+				array( 'bitid_users' ),
+				array( 'uoi_bitid', 'uoi_user_registration' ),
+				array( 'uoi_user' => $user->getId() ),
+				__METHOD__
+			);
+
+			foreach ( $res as $row ) {
+				$bitid_addrs_registration[] = $row;
+			}
+			$res->free();
+		}
+		return $bitid_addrs_registration;
 	}
 
-	$out->addModules( 'ext.bitid' );
-	if( !LoginForm::getLoginToken() ) {
-		LoginForm::setLoginToken();
-	}
-	$out->addHTML( Html::input(
-		'wpLoginToken',
-		LoginForm::getLoginToken(),
-		'hidden'
-	) );
-	return true;
-}
-
-/**
- * Add the BitID login button and necessary JavaScript modules
- * to the login form.
- *
- * @param $template QuickTemplate
- */
-function efAddBitIdLogin( $template ) {
-	$context = RequestContext::getMain();
-	$out = $context->getOutput();
-	$out->addModules( 'ext.bitid' );
-
-	$label = wfMessage( 'bitid' )->escaped();
-	$href = Title::newFromText('Special:BitId')->getFullURL();
-	$bitidLink = Html::element( 'a', array('href' => $href, 'class' => 'mw-ui-button mw-ui-primary'), $label);
-	$template->set( 'header', $bitidLink );
-	return true;
-}
-
-/**
- * Add bitid login button to personal URLs.
- *
- * @param $personal_urls Array of personal URLs
- * @param $title Title currently being viewed
- */
-function efAddBitIdLinks( array &$personal_urls, Title $title ) {
-	global $wgBitIdLoginAnywhere;
-	if( $wgBitIdLoginAnywhere && !isset( $personal_urls['logout'] ) ) {
-		$context = RequestContext::getMain();
-		$out = $context->getOutput();
-		$out->addModules( 'ext.bitid' );
-
-		$personal_urls['bitidlogin'] = array(
-			'text' => wfMessage( 'bitid' ),
-			'href' => Title::newFromText('Special:BitId')->getFullURL(),
-			'active' => $title->isSpecial( 'Userlogin' )
-		);
-	}
-	return true;
-}
-
-function efCreateSqlTable( DatabaseUpdater $updater ) {
-	$updater->addExtensionTable( 'bitid_nonces',
-		dirname( __FILE__ ) . '/scheme/nonces.sql', true );
-	$updater->addExtensionTable( 'bitid_users',
-		dirname( __FILE__ ) . '/scheme/users.sql', true );
-	return true;
 }

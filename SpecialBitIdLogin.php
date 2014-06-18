@@ -1,6 +1,6 @@
 <?php
 /**
- * Implements Special:BitId
+ * Implements Special:BitIdLogin
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,13 +24,13 @@
 require_once dirname(__FILE__) . "/vendors/BitID.php";
 
 /**
- * Implements Special:BitId
+ * Implements Special:BitIdLogin
  *
  * @ingroup SpecialPage
  */
-class SpecialBitId extends SpecialPage {
+class SpecialBitIdLogin extends SpecialPage {
 	function __construct() {
-		parent::__construct('BitId');
+		parent::__construct('BitIdLogin');
 		$this->bitid = new BitID();
 	}
 	function execute($par) {
@@ -47,12 +47,12 @@ class SpecialBitId extends SpecialPage {
 				'address' => $request->getText('address'),
 				'signature' => $request->getText('signature'),
 			));
-			$output->redirect(Title::newFromText('Special:BitId')->getFullURL());
+			$output->redirect(Title::newFromText('Special:BitIdLogin')->getFullURL());
 		}
 
 		$nonce = (isset($_SESSION['bitid_nonce']))? $_SESSION['bitid_nonce'] : $this->bitid->generateNonce();
 
-		$bitid_callback_uri = Title::newFromText('Special:BitId')->getFullURL();
+		$bitid_callback_uri = Title::newFromText('Special:BitIdLogin')->getFullURL();
 		$bitid_uri = $this->bitid->buildURI($bitid_callback_uri, $nonce);
 		$this->save_nonce($nonce);
 
@@ -73,7 +73,7 @@ You can also click on the QRcode if you have a BitID enabled desktop wallet.");
 		$output->addHTML(
 "<a href=\"$bitid_uri\"><img alt=\"Click on QRcode to activate compatible desktop wallet\" border=\"0\" src=\"$bitid_qr\" /></a>");
 
-		$output->addWikiText("No compatible wallet? Use [[Special:BitId#manual-signing | manual signing]].");
+		$output->addWikiText("No compatible wallet? Use [[Special:BitIdLogin#manual-signing | manual signing]].");
 		
 		$output->addHTML(HTML::hidden('nonce', $this->bitid->extractNonce($bitid_uri)));
 		
@@ -91,7 +91,7 @@ Please sign the challenge in the box below using the private key of this Bitcoin
 
 Cumbersome. Yep. Much better with a simple scan or click using a compatible wallet :)");
 
-		$action_uri = Title::newFromText('Special:BitId')->getFullURL();
+		$action_uri = Title::newFromText('Special:BitIdLogin')->getFullURL();
 		$output->addHTML("<form action=\"$action_uri\">");
 
 		$output->addHTML('<p>'.HTML::input('uri', $bitid_uri, 'text', array('readonly' => 'readonly', 'style' => 'width:450px')).'</p>');
@@ -100,11 +100,11 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 		
 		$output->addHTML('<p><label>Signature</label><br/>'.HTML::input('signature', null, null, array('placeholder' => 'Enter the signature', 'style' => 'width:450px')).'</p>');
 		
-		$output->addHTML(HTML::hidden('title', 'Special:BitId'));
+		$output->addHTML(HTML::hidden('title', 'Special:BitIdLogin'));
 
 		$output->addHTML('<p>'.HTML::input('signin', 'Sign in!', 'submit').'</p>');
 
-		$output->addWikiText("Back to [[Special:BitId#qr-code | QR code]].");
+		$output->addWikiText("Back to [[Special:BitIdLogin#qr-code | QR code]].");
 		
 		$output->addHTML('</form>');
 		
