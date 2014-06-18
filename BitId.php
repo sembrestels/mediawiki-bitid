@@ -117,7 +117,9 @@ function efAddBitIdLinks( array &$personal_urls, Title $title ) {
 }
 
 function efCreateSqlTable( DatabaseUpdater $updater ) {
-	$updater->addExtensionTable( 'nonces',
+	$updater->addExtensionTable( 'bitid_nonces',
 		dirname( __FILE__ ) . '/scheme/nonces.sql', true );
+	$updater->addExtensionTable( 'bitid_users',
+		dirname( __FILE__ ) . '/scheme/users.sql', true );
 	return true;
 }

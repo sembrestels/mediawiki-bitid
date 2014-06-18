@@ -127,7 +127,7 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 		$signValid = true; // For testing porpouses
 		if($signValid) {
 			$dbw = wfGetDB(DB_MASTER);
-			$dbw->update('nonces', array('address' => $variables['address']), array('nonce' => $nonce));
+			$dbw->update('bitid_nonces', array('address' => $variables['address']), array('nonce' => $nonce));
 
 			// SIGNED VIA PHONE WALLET (data was sent as payload)
 			if($post_data!==null) {
@@ -143,7 +143,7 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 	private function ajax() {
 		// check if this nonce is logged or not
 		$dbr = wfGetDB(DB_SLAVE);
-		$_address = $dbr->select('nonces', array('address'), array('nonce' => $_POST['nonce']));
+		$_address = $dbr->select('bitid_nonces', array('address'), array('nonce' => $_POST['nonce']));
 		foreach ($_address as $addr) {
 			$address = $addr->address;
 		}
@@ -163,6 +163,6 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 	private function save_nonce($nonce) {
 		$_SESSION['bitid_nonce'] = $nonce;
 		$dbw = wfGetDB( DB_MASTER );
-		$dbw->insert('nonces', array('nonce'=> $nonce), __METHOD__, array('IGNORE'));
+		$dbw->insert('bitid_nonces', array('nonce'=> $nonce), __METHOD__, array('IGNORE'));
 	}
 }
