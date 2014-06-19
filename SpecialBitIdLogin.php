@@ -34,11 +34,25 @@ class SpecialBitIdLogin extends SpecialPage {
 		$this->bitid = new BitID();
 	}
 	function execute($par) {
+		global $wgRequest, $wgUser, $wgOut;
+
 		$request = $this->getRequest();
 		$output = $this->getOutput();
 		$this->setHeaders();
 		$headers = getallheaders();
-		
+
+		if ($_SESSION['bitid_address'] && $wgUser->getID() != 0) {
+			$this->displaySuccessLogin($_SESSION);
+			return;
+		} elseif ($wgUser->getID() != 0) {
+			$this->alreadyLoggedIn();
+			return;
+		}
+		if ($_SESSION['bitid_address']) {
+			$this->chooseNameForm($_SESSION['bitid_address']);
+			return;
+		}
+
 		if ($request->getText('ajax')) {
 			$this->ajax();
 		} elseif ($request->getText('uri') || isset($headers['Content-Type']) && $headers['Content-Type'] == 'application/json') {
@@ -135,7 +149,7 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 			} else {
 				// SIGNED MANUALLY (data is stored in $_POST+$_REQUEST vs payload)
 				// SHOW SOMETHING PRETTY TO THE USER
-				$this->login();
+				$this->login($variables['address']);
 			}
 		}
 	}
@@ -147,22 +161,501 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 		foreach ($_address as $addr) {
 			$address = $addr->address;
 		}
-		if($address!==false) {
+		if($address) {
 			// Create session so the user could log in
-			$this->login();
+			$this->login($address);
 		}
 		//return address/false to tell the VIEW it could log in now or not
 		echo json_encode($address);
 		exit();
 	}
 	
-	private function login() {
-		unset($_SESSION['bitid_nonce']);
-	}
-	
 	private function save_nonce($nonce) {
 		$_SESSION['bitid_nonce'] = $nonce;
 		$dbw = wfGetDB( DB_MASTER );
 		$dbw->insert('bitid_nonces', array('nonce'=> $nonce), __METHOD__, array('IGNORE'));
+	}
+	
+	private function login($address, $data = array()) {
+		global $wgUser;
+		
+		unset($_SESSION['bitid_nonce']);
+		$_SESSION['bitid_address'] = $address;
+		
+		$user = self::getUserFromAddress($address);
+
+		if ($user instanceof User) {
+			# $this->updateUser($user, $data); # update from wallet
+			$wgUser = $user;
+		} else {
+			# $this->saveValues($address, $data);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param String $address
+	 * @return null|User
+	 */
+	private static function getUserFromAddress($address) {
+		
+		$dbr = wfGetDB( DB_SLAVE );
+
+		$id = $dbr->selectField(
+			'bitid_users',
+			'uoi_user',
+			array( 'uoi_bitid' => $address ),
+			__METHOD__
+		);
+
+		if ( $id ) {
+			return User::newFromId( $id );
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Displays a form to let the user choose an account to attach with the
+	 * given BitID
+	 *
+	 * @param $bitid String: BitID address
+	 * @param $data Array: options get from BitID
+	 * @param $messagekey String or null: message name to display at the top
+	 */
+	function chooseNameForm( $bitid, $data = array(), $messagekey = null ) {
+		global $wgAuth, $wgOut, $wgBitIdAllowExistingAccountSelection,
+			$wgHiddenPrefs, $wgUser, $wgBitIdAllowNewAccountname;
+
+		if ( $messagekey ) {
+			$wgOut->addWikiMsg( $messagekey );
+		}
+		$wgOut->addWikiMsg( 'bitidchooseinstructions' );
+
+		$wgOut->addHTML(
+			Xml::openElement( 'form',
+				array(
+					'action' => $this->getTitle( 'ChooseName' )->getLocalUrl(),
+					'method' => 'POST'
+				)
+			) .
+			Xml::fieldset( wfMessage( 'bitidchooselegend' )->text(),
+				false,
+				array(
+					'id' => 'mw-bitid-choosename'
+				)
+			) .
+			Xml::openElement( 'table' )
+		);
+		$def = false;
+
+		if ( $wgBitIdAllowExistingAccountSelection ) {
+			# Let them attach it to an existing user
+
+			# Grab the UserName in the cookie if it exists
+
+			global $wgCookiePrefix;
+			$name = '';
+			if ( isset( $_COOKIE["{$wgCookiePrefix}UserName"] ) ) {
+				$name = trim( $_COOKIE["{$wgCookiePrefix}UserName"] );
+			}
+
+			# show BitId Attributes
+			$bidAttributesToAccept = array( 'fullname', 'nickname', 'email', 'language' );
+			$bidAttributes = array();
+
+			/*
+			foreach ( $bidAttributesToAccept as $bidAttr ) {
+
+				if ( ( $bidAttr == 'fullname' )
+					&& ( in_array( 'realname', $wgHiddenPrefs ) ) ) {
+					continue;
+				}
+
+				if ( array_key_exists( $bidAttr, $sreg ) ) {
+					$checkName = 'wpUpdateUserInfo' . $bidAttr;
+					$bidAttributes[] = Xml::tags( 'li',
+						array(),
+						Xml::check( $checkName,
+							false,
+							array(
+								'id' => $checkName
+							)
+						) .
+						Xml::tags( 'label',
+							array(
+								'for' => $checkName
+							),
+							wfMessage( "bitid$bidAttr" )->text() . wfMessage( 'colon-separator' )->escaped() .
+							Xml::element( 'i',
+								array(),
+								$sreg[$bidAttr]
+							)
+						)
+					);
+				}
+			}
+			*/
+
+			$bidAttributesUpdate = '';
+			/*
+			if ( count( $bidAttributes ) > 0 ) {
+				$bidAttributesUpdate = "<br />\n" .
+					wfMessage( 'bitidupdateuserinfo' )->text() . "\n" .
+					Xml::tags( 'ul',
+						array(),
+						implode( "\n", $bidAttributes )
+					);
+			}
+			*/
+
+			$wgOut->addHTML(
+				Xml::openElement( 'tr' ) .
+				Xml::tags( 'td',
+					array(
+						'class' => 'mw-label'
+					),
+					Xml::radio( 'wpNameChoice',
+						'existing',
+						!$def,
+						array(
+							'id' => 'wpNameChoiceExisting'
+						)
+					)
+				) .
+				Xml::tags( 'td',
+					array(
+						'class' => 'mw-input'
+					),
+					Xml::label( wfMessage( 'bitidchooseexisting' )->text(), 'wpNameChoiceExisting' ) . "<br />" .
+					wfMessage( 'bitidchooseusername' )->text() .
+					Xml::input( 'wpExistingName',
+						16,
+						$name,
+						array(
+							'id' => 'wpExistingName'
+						)
+					) . " " .
+					wfMessage( 'bitidchoosepassword' )->text() .
+					Xml::password( 'wpExistingPassword' ) .
+					$bidAttributesUpdate
+				) .
+				Xml::closeElement( 'tr' )
+			);
+
+		if ( $wgAuth->allowPasswordChange() ) {
+
+			$wgOut->addHTML(
+				Xml::openElement( 'tr' ) .
+
+				Xml::tags( 'td',
+					array(),
+					"&nbsp;"
+				) .
+
+				Xml::tags( 'td',
+					array(),
+					Linker::link(
+						SpecialPage::getTitleFor( 'PasswordReset' ),
+						wfMessage( 'passwordreset' )->escaped(),
+						array(),
+						array( 'returnto' => SpecialPage::getTitleFor( 'BitIdLogin' ) )
+					)
+				) .
+
+				Xml::closeElement( 'tr' )
+			);
+
+		}
+
+
+
+			$def = true;
+
+		} // $wgBitIdAllowExistingAccountSelection
+
+		# These are only available if the visitor is allowed to create account
+		if ( $wgUser->isAllowed( 'createaccount' )
+			&& $wgUser->isAllowed( 'bitid-create-account-with-bitid' )
+			&& !$wgUser->isBlockedFromCreateAccount() ) {
+
+			/*
+			if ( $wgBitIdProposeUsernameFromSREG ) {
+
+				# These options won't exist if we can't get them.
+				if ( array_key_exists( 'nickname', $sreg ) && $this->userNameOK( $sreg['nickname'] ) ) {
+					$wgOut->addHTML(
+						Xml::openElement( 'tr' ) .
+						Xml::tags( 'td',
+							array(
+								'class' => 'mw-label'
+							),
+							Xml::radio( 'wpNameChoice',
+								'nick',
+								!$def,
+								array(
+									'id' => 'wpNameChoiceNick'
+								)
+							)
+						) .
+						Xml::tags( 'td',
+							array(
+								'class' => 'mw-input'
+							),
+							Xml::label( wfMessage( 'bitidchoosenick', $sreg['nickname'] )->escaped(), 'wpNameChoiceNick' )
+						) .
+						Xml::closeElement( 'tr' )
+					);
+				}
+
+				# These options won't exist if we can't get them.
+				$fullname = null;
+				if ( array_key_exists( 'fullname', $sreg ) ) {
+					$fullname = $sreg['fullname'];
+				}
+
+				$axName = $this->getAXUserName( $ax );
+				if ( $axName !== null ) {
+					$fullname = $axName;
+				}
+
+				if ( $fullname && $this->userNameOK( $fullname ) ) {
+					$wgOut->addHTML(
+						Xml::openElement( 'tr' ) .
+						Xml::tags( 'td',
+							array(
+								'class' => 'mw-label'
+							),
+							Xml::radio( 'wpNameChoice',
+								'full',
+								!$def,
+								array(
+									'id' => 'wpNameChoiceFull'
+								)
+							)
+						) .
+						Xml::tags( 'td',
+							array(
+								'class' => 'mw-input'
+							),
+							Xml::label( wfMessage( 'bitidchoosefull', $fullname )->escaped(), 'wpNameChoiceFull' )
+						) .
+						Xml::closeElement( 'tr' )
+					);
+					$def = true;
+				}
+
+				$idname = $this->toUserName( $bitid );
+				if ( $idname && $this->userNameOK( $idname ) ) {
+					$wgOut->addHTML(
+						Xml::openElement( 'tr' ) .
+						Xml::tags( 'td',
+							array(
+								'class' => 'mw-label'
+							),
+							Xml::radio( 'wpNameChoice',
+								'url',
+								!$def,
+								array(
+									'id' => 'wpNameChoiceUrl'
+								)
+							)
+						) .
+						Xml::tags( 'td',
+							array(
+								'class' => 'mw-input'
+							),
+							Xml::label( wfMessage( 'bitidchooseurl', $idname )->text(), 'wpNameChoiceUrl' )
+						) .
+						Xml::closeElement( 'tr' )
+					);
+					$def = true;
+				}
+			} // if $wgBitIdProposeUsernameFromSREG
+			*/
+
+			if ( $wgBitIdAllowNewAccountname ) {
+				$wgOut->addHTML(
+
+				Xml::openElement( 'tr' ) .
+				Xml::tags( 'td',
+					array(
+						'class' => 'mw-label'
+					),
+					Xml::radio( 'wpNameChoice',
+						'manual',
+						!$def,
+						array(
+							'id' => 'wpNameChoiceManual'
+						)
+					)
+				) .
+				Xml::tags( 'td',
+					array(
+						'class' => 'mw-input'
+					),
+					Xml::label( wfMessage( 'bitidchoosemanual' )->text(), 'wpNameChoiceManual' ) . '&#160;' .
+					Xml::input( 'wpNameValue',
+						16,
+						false,
+						array(
+							'id' => 'wpNameValue'
+						)
+					)
+				) .
+				Xml::closeElement( 'tr' )
+				);
+			}
+
+		} // These are only available if all visitors are allowed to create accounts
+
+		LoginForm::setLoginToken();
+
+		# These are always available
+		$wgOut->addHTML(
+			Xml::openElement( 'tr' ) .
+			Xml::tags( 'td',
+				array(),
+				''
+			) .
+			Xml::tags( 'td',
+				array(
+					'class' => 'mw-submit'
+				),
+				Xml::submitButton( MediawikiBitId::loginOrCreateAccountOrConvertButtonLabel(), array( 'name' => 'wpOK' ) ) .
+				Xml::submitButton( wfMessage( 'cancel' )->text(), array( 'name' => 'wpCancel' ) )
+			) .
+			Xml::closeElement( 'tr' ) .
+			Xml::closeElement( 'table' ) .
+			Xml::closeElement( 'fieldset' ) .
+			Html::Hidden( 'bitidChooseNameBeforeLoginToken', LoginForm::getLoginToken() ) .
+			Xml::closeElement( 'form' )
+		);
+	}
+
+	/**
+	 * Handle "Choose name" form submission
+	 */
+	function chooseName() {
+		global $wgRequest, $wgUser, $wgOut;
+
+		if ( LoginForm::getLoginToken() != $wgRequest->getVal( 'bitidChooseNameBeforeLoginToken' ) ) {
+			$wgOut->showErrorPage( 'bitiderror', 'bitid-error-request-forgery' );
+			return;
+		}
+
+		list( $bitid, $sreg, $ax ) = $this->fetchValues();
+		if ( is_null( $bitid ) ) {
+			$this->clearValues();
+			# No messing around, here
+			$wgOut->showErrorPage( 'bitiderror', 'bitiderrortext' );
+			return;
+		}
+
+		if ( $wgRequest->getCheck( 'wpCancel' ) ) {
+			$this->clearValues();
+			$wgOut->showErrorPage( 'bitidcancel', 'bitidcanceltext' );
+			return;
+		}
+
+		$choice = $wgRequest->getText( 'wpNameChoice' );
+		$nameValue = $wgRequest->getText( 'wpNameValue' );
+
+		if ( $choice == 'existing' ) {
+
+			$user = $this->attachUser( $bitid, $sreg,
+				$wgRequest->getText( 'wpExistingName' ),
+				$wgRequest->getText( 'wpExistingPassword' )
+			);
+
+			if ( is_null( $user ) || !$user ) {
+
+				$this->clearValues();
+				// $this->chooseNameForm( $bitid, $sreg, $ax, 'wrongpassword' );
+				return;
+			}
+
+			$force = array();
+			foreach ( array( 'fullname', 'nickname', 'email', 'language' ) as $option ) {
+				if ( $wgRequest->getCheck( 'wpUpdateUserInfo' . $option ) ) {
+					$force[] = $option;
+				}
+			}
+
+			$this->updateUser( $user, $sreg, $ax );
+
+		} else {
+
+			$name = $this->getUserName( $bitid, $sreg, $ax, $choice, $nameValue );
+
+			if ( !$name || !$this->userNameOK( $name ) ) {
+				$this->chooseNameForm( $bitid, $sreg, $ax );
+				return;
+			}
+
+			$user = $this->createUser( $bitid, $sreg, $ax, $name );
+
+		}
+
+		if ( is_null( $user ) ) {
+
+			$this->clearValues();
+			$wgOut->showErrorPage( 'bitiderror', 'bitiderrortext' );
+			return;
+
+		}
+
+		$wgUser = $user;
+		$this->clearValues();
+		$this->displaySuccessLogin( $bitid );
+	}
+	
+	/**
+	 * Display the final "Successful login"
+	 *
+	 * @param $address String: BitID address
+	 */
+	function displaySuccessLogin( $address ) {
+		global $wgUser, $wgOut;
+
+		$this->setupSession();
+		RequestContext::getMain()->setUser( $wgUser );
+		$wgUser->SetCookies();
+
+		# Run any hooks; ignore results
+		$inject_html = '';
+		wfRunHooks( 'UserLoginComplete', array( &$wgUser, &$inject_html ) );
+
+		# Set a cookie for later check-immediate use
+
+		$this->loginSetCookie( $address );
+
+		$wgOut->setPageTitle( wfMessage( 'bitidsuccess' )->text() );
+		$wgOut->setRobotPolicy( 'noindex,nofollow' );
+		$wgOut->setArticleRelated( false );
+		$wgOut->addWikiMsg( 'bitidsuccesstext', $wgUser->getName(), $address );
+		$wgOut->addHtml( $inject_html );
+		list( $returnto, $returntoquery ) = $this->returnTo();
+		$wgOut->returnToMain( null, $returnto, $returntoquery );
+	}
+	
+	/**
+	 * Displays an info message saying that the user is already logged-in
+	 */
+	function alreadyLoggedIn() {
+		global $wgUser, $wgOut;
+
+		$wgOut->setPageTitle( wfMessage( 'bitidalreadyloggedin' )->text() );
+		$wgOut->setRobotPolicy( 'noindex,nofollow' );
+		$wgOut->setArticleRelated( false );
+		$wgOut->addWikiMsg( 'bitidalreadyloggedintext', $wgUser->getName() );
+		list( $returnto, $returntoquery ) = $this->returnTo();
+		$wgOut->returnToMain( null, $returnto, $returntoquery );
+	}
+	
+	function returnTo() {
+		$returnto = isset( $_SESSION['bitid_returnto'] ) ? $_SESSION['bitid_returnto'] : '';
+		$returntoquery = isset( $_SESSION['bitid_returntoquery'] ) ? $_SESSION['bitid_returntoquery'] : '';
+		return array( $returnto, $returntoquery );
 	}
 }

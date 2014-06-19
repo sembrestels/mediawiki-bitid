@@ -19,6 +19,9 @@
  * along with Extension:BitId.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+$wgBitIdAllowExistingAccountSelection = true;
+$wgBitIdAllowNewAccountname = true;
+
 $wgExtensionCredits['other'][] = array(
 	'path' => __FILE__,
 	'name' => 'BitId',
@@ -44,6 +47,39 @@ $wgExtensionMessagesFiles['BitIdAlias'] = __DIR__ . "/BitId.alias.php";
 $wgAutoloadClasses['SpecialBitIdLogin'] = __DIR__ . '/SpecialBitIdLogin.php';
 $wgAutoloadClasses['BitIdHooks'] = __DIR__ . '/BitId.hooks.php';
 $wgSpecialPages['BitIdLogin'] = 'SpecialBitIdLogin';
+
+
+# new user rights
+$wgAvailableRights[] = 'bitid-converter-access';
+$wgAvailableRights[] = 'bitid-dashboard-access';
+$wgAvailableRights[] = 'bitid-dashboard-admin';
+$wgAvailableRights[] = 'bitid-login-with-bitid';
+$wgAvailableRights[] = 'bitid-create-account-with-bitid';
+$wgAvailableRights[] = 'bitid-create-account-without-bitid';
+
+# allow everyone to login with BitID
+$wgGroupPermissions['*']['bitid-login-with-bitid'] = true;
+
+# uncomment to allow users read access the dashboard
+# $wgGroupPermissions['user']['bitid-dashboard-access'] = true;
+
+# allow users to add or convert BitIDs to their accounts
+# but only if we do not enforce the use of a certain provider
+# if $wgBitIDForcedProvider is set, the permission is set false
+$wgGroupPermissions['user']['bitid-converter-access'] = true;
+
+# allow sysops read access the dashboard and
+# allow sysops to administrate the BitID settings (feature under construction)
+$wgGroupPermissions['sysop']['bitid-dashboard-access'] = true;
+$wgGroupPermissions['sysop']['bitid-dashboard-admin'] = true;
+
+# allow sysops always to create accounts
+# i.e. also in case of $wgBitIDLoginOnly==true
+$wgGroupPermissions['*']['bitid-login-with-bitid'] = true;
+$wgGroupPermissions['*']['bitid-create-account-with-bitid'] = true;
+$wgGroupPermissions['*']['bitid-create-account-without-bitid'] = false;
+$wgGroupPermissions['sysop']['bitid-create-account-without-bitid'] = true;
+
 
 $wgResourceModules['ext.bitid'] = array(
 	'scripts' => array('js/bitid_hooks.js'),
@@ -80,6 +116,36 @@ class MediawikiBitId {
 			$res->free();
 		}
 		return $bitid_addrs_registration;
+	}
+	
+	
+	/**
+	 * @return string
+	 */
+	public static function loginOrCreateAccountOrConvertButtonLabel() {
+		global $wgUser, $wgOut;
+
+		if ( $wgOut->getTitle()->equals( SpecialPage::getTitleFor( 'BitIdConvert' ) ) ) {
+
+			return wfMessage( 'bitid-selection-button-convert' )->text();
+
+		} else {
+
+			if ( $wgUser->isAllowed( 'bitid-create-account-with-bitid' )
+				&& !$wgUser->isAllowed( 'bitid-login-with-bitid' ) ) {
+				return wfMessage( 'bitid-selection-button-create-account' )->text();
+			}
+
+			if ( !$wgUser->isAllowed( 'bitid-create-account-with-bitid' )
+				&& $wgUser->isAllowed( 'bitid-login-with-bitid' ) ) {
+				return wfMessage( 'bitid-selection-button-login' )->text();
+			}
+
+			return wfMessage( 'bitid-selection-button-login-or-create-account' )->text();
+
+		}
+
+
 	}
 
 }
