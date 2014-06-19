@@ -73,7 +73,7 @@ You can also click on the QRcode if you have a BitID enabled desktop wallet.");
 		$output->addHTML(
 "<a href=\"$bitid_uri\"><img alt=\"Click on QRcode to activate compatible desktop wallet\" border=\"0\" src=\"$bitid_qr\" /></a>");
 
-		$output->addWikiText("No compatible wallet? Use [[Special:BitIdLogin#manual-signing | manual signing]].");
+		$output->addWikiText("No compatible wallet? Use [[Special:BitIdLogin#bitid-manual-signing | manual signing]].");
 		
 		$output->addHTML(HTML::hidden('nonce', $this->bitid->extractNonce($bitid_uri)));
 		
@@ -104,7 +104,7 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 
 		$output->addHTML('<p>'.HTML::input('signin', 'Sign in!', 'submit').'</p>');
 
-		$output->addWikiText("Back to [[Special:BitIdLogin#qr-code | QR code]].");
+		$output->addWikiText("Back to [[Special:BitIdLogin#bitid-qr-code | QR code]].");
 		
 		$output->addHTML('</form>');
 		

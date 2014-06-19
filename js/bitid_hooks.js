@@ -1,11 +1,11 @@
 jQuery(function($) {
-	$('a[href$="Special:BitId#manual-signing"]').click(function() {
+	$('a[href$="#bitid-manual-signing"]').click(function() {
 		$('#qr-code').fadeOut('fast', function() {
 			$('#manual-signing').fadeIn();
 			$('#manual-signing input[name="address"]').focus();
 		});
 	});
-	$('a[href$="Special:BitId#qr-code"]').click(function() {
+	$('a[href$="#bitid-qr-code"]').click(function() {
 		$('#manual-signing').fadeOut('fast', function() {
 			$('#qr-code').fadeIn();
 		});
