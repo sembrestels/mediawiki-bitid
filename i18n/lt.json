@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Garas",
+			"Hugo.arg"
+		]
+	},
+	"bitiderror": "Tikrinimo klaida",
+	"bitidnickname": "Slapyvardis",
+	"bitidfullname": "Visas vardas",
+	"bitidemail": "El. pašto adresas",
+	"bitidlanguage": "Kalba",
+	"bitidchoosepassword": "Slaptažodis:"
+}

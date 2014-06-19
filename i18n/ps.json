@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ahmed-Najib-Biabani-Ibrahimkhel"
+		]
+	},
+	"bitidoptional": "ستاسې په خوښه",
+	"bitidrequired": "اړين مالومات",
+	"bitidnickname": "کورنی نوم",
+	"bitidfullname": "اصلي نوم",
+	"bitidemail": "برېښليک پته",
+	"bitidlanguage": "ژبه",
+	"bitidtimezone": "د وخت سيمه",
+	"bitidchooselegend": "د کارن نوم او گڼون خوښه",
+	"bitidchooseinstructions": "ټولو کارنانو ته د يوه کورني نوم اړتيا شته؛\nتاسې يو نوم د لاندينيو خوښنو نه ځانته ټاکلی شی.",
+	"bitidchoosenick": "ستاسې کورنی نوم ($1)",
+	"bitidchoosefull": "ستاسې اصلي نوم ($1)",
+	"bitidchoosemanual": "ستاسې د خوښې يو نوم:",
+	"bitidchooseusername": "کارن-نوم:",
+	"bitidchoosepassword": "پټنوم:",
+	"bitidnousername": "هېڅ يو کارن-نوم نه دی ځانگړی شوی.",
+	"bitidbadusername": "يو ناسم کارن-نوم مو ځانگړی کړی.",
+	"bitiddelete-button": "تاييد",
+	"bitid-addrs-action": "چاره",
+	"bitid-addrs-delete": "ړنگول",
+	"bitid-login-or-create-account": "ننوتل او يا يو نوی گڼون جوړول",
+	"bitid-provider-label-google": "د گووگل د گڼون په مرسته ننوتل",
+	"bitid-provider-label-yahoo": "د ياهو د گڼون په مرسته ننوتل",
+	"bitid-provider-label-other-username": "تاسې خپل $1 کارن-نوم وليکۍ"
+}

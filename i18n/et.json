@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"Avjoska",
+			"Pikne"
+		]
+	},
+	"bitidoptional": "Valikuline",
+	"bitidrequired": "Nõutav",
+	"bitidnickname": "Hüüdnimi",
+	"bitidfullname": "Pärisnimi",
+	"bitidemail": "E-posti aadress",
+	"bitidlanguage": "Keel",
+	"bitidtimezone": "Ajavöönd",
+	"bitidchoosenick": "Sinu hüüdnimi ($1)",
+	"bitidchoosefull": "Sinu pärisnimi ($1)",
+	"bitidchoosemanual": "Sinu valitud nimi:",
+	"bitidchooseexisting": "Olemasolev konto selles vikis",
+	"bitidchooseusername": "Kasutajanimi:",
+	"bitidchoosepassword": "Parool:",
+	"bitid-convert-already-your-bitid-text": "BitID $1 on juba sinu kontoga seotud. Seda pole mõtet uuesti lisada.",
+	"bitid-convert-other-users-bitid-text": "BitID $1 kuulub kellelegi teisele. Sa ei saa kasutada teise kasutaja BitID-d.",
+	"bitidalreadyloggedin": "Oled juba sisse loginud.",
+	"bitidnousername": "Kasutajanimi määratlemata.",
+	"bitidbadusername": "Märgitud kasutajanimi on vigane.",
+	"bitiddelete-button": "Kinnita",
+	"bitid-addrs-delete": "Kustuta",
+	"bitid-provider-label-google": "Logi sisse oma Google'i konto kaudu",
+	"bitid-provider-label-yahoo": "Logi sisse oma Yahoo konto kaudu"
+}

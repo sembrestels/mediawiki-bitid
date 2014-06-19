@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Botuzhaleny-sodamo"
+		]
+	},
+	"bitidoptional": "Мелень коряс",
+	"bitidrequired": "Тентеме кодаяк",
+	"bitidnickname": "Путонь лем",
+	"bitidfullname": "Алкуксонь леметь",
+	"bitidemail": "Е-сёрма парго",
+	"bitidlanguage": "Кель",
+	"bitidtimezone": "Шкань каркс",
+	"bitidchooseusername": "Совицянь леметь:",
+	"bitidchoosepassword": "Совамо валот:",
+	"bitiddelete-button": "Кемекстамс"
+}

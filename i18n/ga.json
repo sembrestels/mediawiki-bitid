@@ -1,0 +1,15 @@
+{
+	"@metadata": {
+		"authors": [
+			"Alison",
+			"පසිඳු කාවින්ද"
+		]
+	},
+	"bitidpermission": "Earráid ceadúnais BitID",
+	"bitidlanguage": "Teanga",
+	"bitidchooseusername": "Ainm úsáideora:",
+	"bitidchoosepassword": "D'fhocal faire:",
+	"bitiddelete-button": "Deimhnigh",
+	"bitid-addrs-action": "Gníomh",
+	"bitid-addrs-delete": "Scrios"
+}

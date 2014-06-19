@@ -1,0 +1,17 @@
+{
+	"@metadata": {
+		"authors": [
+			"Erikoo"
+		]
+	},
+	"bitidoptional": "ရွေးပိုင်ခွင့်",
+	"bitidrequired": "လိုအပ်သည်",
+	"bitidnickname": "Nickname အမည်",
+	"bitidfullname": "အမည် အပြည့်အစုံ",
+	"bitidemail": "အီးမေး လိပ်စာ",
+	"bitidlanguage": "ဘာသာ",
+	"bitid-provider-label-google": "Google အကောင့် အသုံးပြု၍ Login ဝင်ရန်",
+	"bitid-provider-label-yahoo": "Yahoo အကောင့် အသုံးပြု၍ Login ဝင်ရန်",
+	"bitid-provider-label-aol": "AOL အကောင့် အားရိုက်ပါ",
+	"bitid-provider-label-other-username": "သင်၏ $1 မှ အသုံးပြုသူ အမည်အား ရိုက်ပါ"
+}

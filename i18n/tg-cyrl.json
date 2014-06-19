@@ -1,0 +1,20 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ibrahim"
+		]
+	},
+	"bitid-desc": "Ба вики бо [//bitid.net/ BitID] вуруд кунед, ва ба дигар сомонаҳои BitID бо ҳисоби корбарии вики вуруд кунед",
+	"bitidlogin": "Вуруд / эҷоди ҳисоб бо BitID",
+	"bitidserver": "Хидматгузори BitID",
+	"bitidxrds": "Парвандаи Yadis",
+	"bitidconvert": "Табдилкунандаи BitID",
+	"bitiderror": "Хатои BitID",
+	"bitiderrortext": "Дар ҳолати тасдиқи нишонаи BitID хатое рух дод.",
+	"bitidconfigerror": "Хатои Танзимоти BitID",
+	"bitidconfigerrortext": "Танзимоти захирасозии BitID барои ин вики номӯътабар аст.\nЛутфан бо мудири сомона тамос бигиред.",
+	"bitidoptional": "Ихтиёрӣ",
+	"bitidemail": "Нишонаи почтаи электронӣ",
+	"bitidlanguage": "Забон",
+	"bitidchoosepassword": "Калимаи убур:"
+}

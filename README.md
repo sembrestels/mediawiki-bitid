@@ -1,12 +1,16 @@
 ## BitID for MediaWiki
 
-### Installation
+### Requirements
 
-Make sure you have the GMP extension for PHP. In Debian/Ubuntu install:
+The MediaWiki **minium** version is 1.23.0.
+
+Also, make sure you have the GMP extension for PHP. In Debian/Ubuntu install:
 
 ```sh
 $ sudo apt-get install php5-gmp
 ```
+
+### Installation
 
 Add the following line in your `LocalSettings.php`.
 

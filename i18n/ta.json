@@ -1,0 +1,35 @@
+{
+	"@metadata": {
+		"authors": [
+			"Karthi.dr",
+			"Shanmugamp7"
+		]
+	},
+	"bitidcancel": "சரிபார்ப்பு  இரத்து செய்யப்பட்டது",
+	"bitidfailure": "சரிபார்ப்பு தோல்வியுற்றது",
+	"bitidsuccess": "சரிபார்ப்பு  வெற்றியடைந்தது",
+	"bitidoptional": "விருப்பத்தேர்வு",
+	"bitidrequired": "தேவைபடுகிறது",
+	"bitidnickname": "புனைப்பெயர்",
+	"bitidfullname": "முழுப்பெயர்",
+	"bitidemail": "மின்னஞ்சல் முகவரி",
+	"bitidlanguage": "மொழி",
+	"bitidtimezone": "நேர வலயம்",
+	"bitidchooseinstructions": "எல்லாப் பயனர்களுக்கும் புனைப்பெயர் தேவை.\nபின்வரும் விருப்பத் தேர்வுகளுள் ஒன்றை நீங்கள் தேர்வு  செய்யலாம்.",
+	"bitidchoosenick": "உங்கள் புனைப்பெயர் ($1)",
+	"bitidchoosefull": "உங்கள் முழுப்பெயர் ($1)",
+	"bitidchooseusername": "பயனர் பெயர்:",
+	"bitidchoosepassword": "கடவுச்சொல்:",
+	"bitid-convert-other-users-bitid-text": "இது வேறு ஒருவரின் BitID.",
+	"bitidalreadyloggedin": "நீங்கள் ஏற்கனவே புகுபதிகை செய்துள்ளீர்கள்.",
+	"bitidnousername": "ஒரு பயனர் பெயரும் குறிப்பிடப்படவில்லை.",
+	"bitidbadusername": "மோசமான பயனர் பெயர் குறிப்பிடப்பட்டுள்ளது.",
+	"bitiddelete-button": "உறுதிசெய்",
+	"bitid-addrs-url": "உரலி (URL)",
+	"bitid-addrs-action": "செயல்",
+	"bitid-addrs-registration": "பதிவு செய்யும் நேரம்",
+	"bitid-addrs-delete": "நீக்கு",
+	"bitid-login-or-create-account": "புகுபதிகை செய்க அல்லது  புதிய கணக்கு ஒன்றை உருவாக்கவும்",
+	"bitid-provider-label-google": "உங்கள் கூகுள் கணக்கைப் பயன்படுத்திப் புகுபதிகை செய்க",
+	"bitid-provider-label-other-username": "உங்கள் $1 பயனர் பெயரை உள்ளிடவும்"
+}

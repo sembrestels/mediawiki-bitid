@@ -38,9 +38,9 @@ $wgHooks['DeleteAccount'][] = 'BitIdHooks::onDeleteAccount';
 $wgHooks['MergeAccountFromTo'][] = 'BitIdHooks::onMergeAccountFromTo';
 $wgHooks['GetPreferences'][] = 'BitIdHooks::onGetPreferences';
 
-//$wgAutoloadClasses['ApiBitId'] = __DIR__ . '/ApiBitId.php';
-//$wgAPIModules['bitid'] = 'ApiBitId';
-$wgExtensionMessagesFiles['BitId'] = __DIR__ . '/BitId.i18n.php';
+$wgMessagesDirs['BitId'] = __DIR__ . '/i18n';
+$wgExtensionMessagesFiles['BitIdAlias'] = __DIR__ . "/BitId.alias.php";
+
 $wgAutoloadClasses['SpecialBitIdLogin'] = __DIR__ . '/SpecialBitIdLogin.php';
 $wgAutoloadClasses['BitIdHooks'] = __DIR__ . '/BitId.hooks.php';
 $wgSpecialPages['BitIdLogin'] = 'SpecialBitIdLogin';
@@ -54,7 +54,7 @@ $wgResourceModules['ext.bitid'] = array(
 	'remoteExtPath' => 'BitId'
 );
 
-class BitId {
+class MediawikiBitId {
 	
 	/**
 	 * Find the user with the given bitid

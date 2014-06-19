@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Умар"
+		]
+	},
+	"bitidpermission": "BitID тӀекхачарна бакъона гӀалат",
+	"bitidlanguage": "Мотт",
+	"bitidchooselegend": "Декъашхочун цӀе а дӀаяздар а харжар",
+	"bitidchoosemanual": "Ахьа хаьржина цӀе:",
+	"bitidchooseusername": "декъашхочун цӀе:",
+	"bitidchoosepassword": "Пароль:",
+	"bitiddelete": "ДӀаяккха BitID",
+	"bitiddelete-button": "Бакъдан",
+	"bitid-addrs-action": "Дийраш",
+	"bitid-addrs-delete": "ДӀаяккха",
+	"bitid-add-url": "ТӀетоха керла BitID",
+	"bitid-trusted-sites-delete-confirmation-page-title": "Тешаме сайташ дӀаяхар"
+}

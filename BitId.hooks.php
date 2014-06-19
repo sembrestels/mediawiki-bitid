@@ -67,7 +67,7 @@ class BitIdHooks {
 			$returnto = $title->isSpecial( 'Userlogout' ) ? '' : ( 'returnto=' . $title->getPrefixedURL() );
 
 			$personal_urls['bitidlogin'] = array(
-				'text' => wfMessage( 'bitid' )->text(),
+				'text' => wfMessage( 'bitidlogin' )->text(),
 				'href' => $sk->makeSpecialUrl( 'BitIdLogin', $returnto ),
 				'active' => $title->isSpecial( 'BitIdLogin' )
 			);
@@ -119,7 +119,7 @@ class BitIdHooks {
 	private static function getAssociatedBitIdsTable( $user ) {
 		global $wgLang;
 
-		$bitid_addrs_registration = BitId::getUserBitIdInformation( $user );
+		$bitid_addrs_registration = MediawikiBitId::getUserBitIdInformation( $user );
 		$delTitle = SpecialPage::getTitleFor( 'BitIdConvert', 'Delete' );
 
 		$rows = '';
@@ -140,7 +140,7 @@ class BitIdHooks {
 			$rows .= Xml::tags( 'tr', array(),
 				Xml::tags( 'td',
 					array(),
-					Xml::element( 'a', array( 'href' => 'bitcoin:'.$addr_reg->uoi_openid ), $addr_reg->uoi_openid )
+					Xml::element( 'a', array( 'href' => 'bitcoin:'.$addr_reg->uoi_bitid ), $addr_reg->uoi_bitid )
 				) .
 				Xml::tags( 'td',
 					array(),
@@ -150,7 +150,7 @@ class BitIdHooks {
 					array(),
 					Linker::link( $delTitle, wfMessage( 'bitid-addrs-delete' )->text(),
 						array(),
-						array( 'url' => $addr_reg->uoi_openid )
+						array( 'url' => $addr_reg->uoi_bitid )
 					)
 				)
 			) . "\n";
@@ -159,20 +159,20 @@ class BitIdHooks {
 			Xml::tags( 'tr', array(),
 				Xml::element( 'th',
 					array(),
-					wfMessage( 'bitid-addr-url' )->text() ) .
+					wfMessage( 'bitid-addrs-addr' )->text() ) .
 				Xml::element( 'th',
 					array(),
-					wfMessage( 'bitid-addr-registration' )->text() ) .
+					wfMessage( 'bitid-addrs-registration' )->text() ) .
 				Xml::element( 'th',
 					array(),
-					wfMessage( 'bitid-addr-action' )->text() )
+					wfMessage( 'bitid-addrs-action' )->text() )
 				) . "\n" .
 			$rows
 		);
 
 		$info .= Linker::link(
-			SpecialPage::getTitleFor( 'OpenIDConvert' ),
-			wfMessage( 'openid-add-url' )->escaped()
+			SpecialPage::getTitleFor( 'BitIdConvert' ),
+			wfMessage( 'bitid-add-url' )->escaped()
 		);
 		
 		return $info;

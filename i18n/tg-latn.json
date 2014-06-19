@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Liangent"
+		]
+	},
+	"bitid-desc": "Ba viki bo [//bitid.net/ BitID] vurud kuned, va ba digar somonahoi BitID bo hisobi korbariji viki vurud kuned",
+	"bitidlogin": "Bo BitID vurud kuned",
+	"bitidserver": "Xidmatguzori BitID",
+	"bitidxrds": "Parvandai Yadis",
+	"bitidconvert": "Tabdilkunandai BitID",
+	"bitiderror": "Xatoi tasdiq",
+	"bitiderrortext": "Dar holati tasdiqi nişonai BitID xatoe rux dod.",
+	"bitidconfigerror": "Xatoi Tanzimoti BitID",
+	"bitidoptional": "Ixtijorī",
+	"bitidemail": "Nişonai poctai elektronī",
+	"bitidlanguage": "Zabon",
+	"bitidchoosepassword": "Kalimai ubur:"
+}

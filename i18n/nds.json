@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"Joachim Mos"
+		]
+	},
+	"bitid-addrs-action": "Akschoon",
+	"bitid-addrs-delete": "Wegdoon",
+	"bitid-trusted-sites-table-header-column-action": "Akschoon",
+	"bitid-trusted-sites-delete-link-action-text": "Wegdoon"
+}

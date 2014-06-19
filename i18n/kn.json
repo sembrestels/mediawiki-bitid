@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"Nayvik"
+		]
+	},
+	"bitidoptional": "ಐಚ್ಛಿಕ",
+	"bitidnickname": "ಉಪನಾಮ",
+	"bitidlanguage": "ಭಾಷೆ",
+	"bitidtimezone": "ಸಮಯ ವಲಯ",
+	"bitidchoosepassword": "ಪ್ರವೇಶಪದ:",
+	"bitid-addrs-delete": "ಅಳಿಸು"
+}

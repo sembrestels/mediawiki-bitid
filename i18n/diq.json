@@ -1,0 +1,24 @@
+{
+	"@metadata": {
+		"authors": [
+			"Erdemaslancan",
+			"Gorizon",
+			"Mirzali"
+		]
+	},
+	"bitidoptional": "Opsiyonel",
+	"bitidrequired": "Lazım",
+	"bitidnickname": "Leqebe",
+	"bitidfullname": "Nameyo tam",
+	"bitidemail": "Adresa e-postey",
+	"bitidlanguage": "Zıwan",
+	"bitidtimezone": "Warey saete",
+	"bitidchooseusername": "Nameyê karberi:",
+	"bitidchoosepassword": "Parola:",
+	"bitidloginlabel": "BitID URL",
+	"bitiddelete-button": "Tesdiq",
+	"prefs-bitid-show-bitid": "Grey OPENID perda karberda şımad",
+	"bitid-addrs-url": "URL",
+	"bitid-addrs-action": "Kerdış",
+	"bitid-addrs-delete": "Bestere"
+}

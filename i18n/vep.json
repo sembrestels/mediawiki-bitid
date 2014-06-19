@@ -1,0 +1,20 @@
+{
+	"@metadata": {
+		"authors": [
+			"Игорь Бродский"
+		]
+	},
+	"bitidxrds": "Yadis-fail",
+	"bitiderror": "Verifikacijan petuz",
+	"bitidoptional": "Opcionaline",
+	"bitidrequired": "Pidab",
+	"bitidnickname": "Nikneim",
+	"bitidemail": "E-počtan adres",
+	"bitidlanguage": "Kel'",
+	"bitidtimezone": "Aigzon",
+	"bitidchoosepassword": "Peitsana:",
+	"bitidupdateuserinfo": "Udištada minun personaline informacii",
+	"bitiddelete-button": "Vahvištoitta",
+	"bitid-addrs-action": "Tegend",
+	"bitid-addrs-delete": "Heitta poiš"
+}

@@ -1,0 +1,25 @@
+{
+	"@metadata": {
+		"authors": [
+			"Meursault2004"
+		]
+	},
+	"bitidxrds": "Berkas Yadis",
+	"bitiderror": "Kaluputan vérifikasi",
+	"bitidcancel": "Vérifikasi dibatalaké",
+	"bitidfailure": "Vérifikasi gagal",
+	"bitidtrustinstructions": "Mangga dipriksa yèn panjenengan péngin mbagi data karo $1.",
+	"bitidallowtrust": "Marengaké $1 percaya karo rékening panganggo iki.",
+	"bitidnopolicy": "Situs iki durung spésifikasi kawicaksanan privasi.",
+	"bitidoptional": "Opsional",
+	"bitidrequired": "Diperlokaké",
+	"bitidnickname": "Jeneng sesinglon",
+	"bitidfullname": "Jeneng jangkep",
+	"bitidemail": "Alamat e-mail",
+	"bitidlanguage": "Basa",
+	"bitidchooseinstructions": "Kabèh panganggo prelu jeneng sesinglon;\npanjenengan bisa milih salah siji saka opsi ing ngisor iki.",
+	"bitidchoosefull": "Jeneng pepak panjenengan ($1)",
+	"bitidchooseauto": "Jeneng ($1) sing digawé sacara otomatis",
+	"bitidchoosemanual": "Jeneng miturut pilihan panjenengan:",
+	"bitidchoosepassword": "Tembung sandhi:"
+}

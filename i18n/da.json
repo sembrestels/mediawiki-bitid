@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"Christian List",
+			"Froztbyte",
+			"Jon Harald Søby"
+		]
+	},
+	"bitidserver": "BitID-server",
+	"bitidxrds": "Yadis-fil",
+	"bitiderror": "BitID fejl",
+	"bitidcancel": "Bekræftelse annulleret",
+	"bitidusernameprefix": "BitID-bruger",
+	"bitidrequired": "Påkrævet",
+	"bitidnickname": "Kaldenavn",
+	"bitidlanguage": "Sprog",
+	"bitidchooseinstructions": "Alle brugere skal have et brugernavn;\ndu kan vælge et fra nedenstående muligheder.",
+	"bitidchooseusername": "Brugernavn:",
+	"bitidchoosepassword": "Adgangskode:",
+	"bitidnousername": "Intet brugernavn angivet.",
+	"bitidbadusername": "Ugyldigt brugernavn angivet.",
+	"bitidloginlabel": "BitID-adresse",
+	"bitiddelete": "Slet BitID",
+	"bitiddelete-button": "Bekræft",
+	"bitiddelete-success": "BitID er blevet fjernet fra din konto.",
+	"bitid-addrs-action": "Handling",
+	"bitid-addrs-delete": "Slet",
+	"bitid-add-url": "Tilføj en ny BitID til din konto",
+	"bitid-provider-label-aol": "Indtast dit AOL-brugernavn"
+}

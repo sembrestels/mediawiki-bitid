@@ -1,0 +1,24 @@
+{
+	"@metadata": {
+		"authors": [
+			"334a",
+			"Basharh"
+		]
+	},
+	"bitidusernameprefix": "ܡܦܠܚܢܐ ܕܗܝܝܘܬܐ ܦܬܝܚܬܐ",
+	"bitidoptional": "ܓܒܝܝܐ",
+	"bitidfullname": "ܫܡܐ ܫܪܝܪܐ",
+	"bitidemail": "ܡܘܢܥܐ ܕܒܝܠܕܪܐ ܐܠܩܛܪܘܢܝܐ",
+	"bitidlanguage": "ܠܫܢܐ",
+	"bitidtimezone": "ܙܘܢܐ ܙܒܢܝܐ:",
+	"bitidchooselegend": "ܓܒܝܐ ܕܚܘܫܒܢܐ ܘܫܡܐ ܕܡܦܠܚܢܐ",
+	"bitidchoosefull": "ܫܡܐ ܫܪܝܪܐ ܕܝܠܟ($1)",
+	"bitidchoosepassword": "ܡܠܬܐ ܕܥܠܠܐ:",
+	"bitidloginlabel": "URL ܕܗܝܝܘܬܐ ܦܬܝܚܬܐ",
+	"bitiddelete": "ܫܘܦ ܗܝܝܘܬܐ ܦܬܝܚܬܐ",
+	"bitiddelete-button": "ܫܪܪ",
+	"bitid-addrs-action": "ܥܒܕܐ",
+	"bitid-addrs-delete": "ܫܘܦ",
+	"bitid-add-url": "ܐܘܣܦ ܗܝܝܘܬܐ ܦܬܝܚܬܐ ܚܕܬܐ ܠܚܘܫܒܢܟ",
+	"bitid-provider-label-other-username": "ܐܥܠ ܫܡܐ ܕܡܦܠܚܢܐ ܕܝܠܟ ܒ $1"
+}

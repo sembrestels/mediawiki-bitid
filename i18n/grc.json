@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"Crazymadlover",
+			"Omnipaedista"
+		]
+	},
+	"bitidoptional": "Προαιρετικόν",
+	"bitidrequired": "Ἀπαιτούμενον",
+	"bitidnickname": "Ψευδώνυμον",
+	"bitidfullname": "Πλῆρες ὄνομα",
+	"bitidemail": "Ἡλεκτρονικὴ διεύθυνσις",
+	"bitidlanguage": "Γλῶττα",
+	"bitidtimezone": "Χρονικὴ ζώνη:",
+	"bitidchoosepassword": "Σῆμα:",
+	"bitiddelete-button": "Κυροῦν",
+	"bitid-addrs-action": "Δρᾶσις",
+	"bitid-addrs-delete": "Σβεννύναι"
+}

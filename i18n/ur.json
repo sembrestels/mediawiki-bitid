@@ -1,0 +1,24 @@
+{
+	"@metadata": {
+		"authors": [
+			"පසිඳු කාවින්ද"
+		]
+	},
+	"bitiderror": "تصدیق کی غلطی",
+	"bitidcancel": "منسوخ کر کے تصدیق",
+	"bitidfailure": "تصدیق ناکام",
+	"bitidnopolicy": "ویب سائٹ ایک راز داری کی پالیسی مخصوص نہیں ہے.",
+	"bitidoptional": "اختیاری",
+	"bitidrequired": "کی ضرورت",
+	"bitidnickname": "عرفیت",
+	"bitidemail": "ای میل پتہ",
+	"bitidlanguage": "زبان",
+	"bitidtimezone": "منطقۂ وقت",
+	"bitidchoosemanual": "آپ کی پسند کا ایک نام:",
+	"bitidchooseusername": "صارف کا نام:",
+	"bitidchoosepassword": "پاس ورڈ:",
+	"bitiddelete-button": "اس بات کی تصدیق",
+	"bitid-addrs-action": "کارروائی",
+	"bitid-addrs-registration": "رجسٹریشن کے وقت",
+	"bitid-addrs-delete": "حذف کریں"
+}

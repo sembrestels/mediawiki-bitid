@@ -1,0 +1,43 @@
+{
+	"@metadata": {
+		"authors": [
+			"Joetaras"
+		]
+	},
+	"bitidserver": "Server BitID",
+	"bitidxrds": "File Yadis",
+	"bitidconvert": "Convertitore BitID",
+	"bitidoptional": "Opzionele",
+	"bitidrequired": "Richieste",
+	"bitidnickname": "Soprannome",
+	"bitidfullname": "Nome vere",
+	"bitidemail": "Indirizze e-mail",
+	"bitidlanguage": "Lènghe",
+	"bitidtimezone": "Orarie d'a zone",
+	"bitidchoosenick": "'U soprannome tune ($1)",
+	"bitidchoosefull": "'U nome vere tune ($1)",
+	"bitidchoosemanual": "Scacchie 'nu nome:",
+	"bitidchooseusername": "Nome de l'utende:",
+	"bitidchoosepassword": "Passuord:",
+	"bitidnousername": "Nisciune nome utende specificate.",
+	"bitidbadusername": "'U nome utende specificate non g'è valide.",
+	"bitidloginlabel": "URL de BitID",
+	"bitiddelete-button": "Conferme",
+	"bitid-addrs-url": "URL",
+	"bitid-addrs-action": "Azione",
+	"bitid-addrs-registration": "Orarie de reggistrazzione",
+	"bitid-addrs-delete": "Scangille",
+	"bitid-add-url": "Aggiunge 'nu nuève BitID a 'u cunde tune",
+	"bitid-login-or-create-account": "Trase o ccreje 'nu cunde utende nuève",
+	"bitid-provider-label-bitid": "Mitte l'URL toje de BitID",
+	"bitid-provider-label-google": "Tràse ausanne 'u cunde utende de Google",
+	"bitid-provider-label-yahoo": "Tràse ausanne 'u cunde utende de Yahoo",
+	"bitid-provider-label-aol": "Mitte 'u tue nome utende AOL",
+	"bitid-provider-label-other-username": "Mitte 'u tue $1 nome utende",
+	"specialpages-group-bitid": "Pàggene de servizie de BitID e 'mbormaziune de state",
+	"bitid-dashboard-title": "Cruscotte de BitID",
+	"bitid-dashboard-title-admin": "Cruscotte de BitID (amministratore)",
+	"bitid-dashboard-number-bitid-users": "Numere de utinde cu BitID",
+	"bitid-dashboard-number-bitids-in-database": "Numere de BitID (totale)",
+	"bitid-dashboard-number-users-without-bitid": "Numere de utinde senze BitID"
+}

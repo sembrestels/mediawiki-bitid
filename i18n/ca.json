@@ -1,0 +1,34 @@
+{
+	"@metadata": {
+		"authors": [
+			"Alvaro Vidal-Abarca",
+			"Fitoschido",
+			"Paucabot",
+			"SMP",
+			"Solde",
+			"Toniher"
+		]
+	},
+	"bitid-desc": "Inicieu una sessió al wiki amb un [//bitid.net/ BitID], i inicieu una sessió a qualsevol lloc web compatible amb BitID amb el vostre compte wiki",
+	"bitidlogin": "Inicia una sessió o crea un compte amb BitID",
+	"bitidserver": "Servidor BitID",
+	"bitidxrds": "Fitxer Yadis",
+	"bitidconvert": "Conversor BitID",
+	"bitiderror": "Error de BitID",
+	"bitidfailure": "Verificació fallida",
+	"bitidusernameprefix": "Usuari BitID",
+	"bitidoptional": "Opcional",
+	"bitidrequired": "Requerit",
+	"bitidnickname": "Sobrenom",
+	"bitidfullname": "Nom real",
+	"bitidemail": "Adreça de correu electrònic",
+	"bitidlanguage": "Idioma",
+	"bitidtimezone": "Fus horari",
+	"bitidchooseinstructions": "Tots els usuaris cal que tinguin un sobrenom;\npodeu triar-ne un de les opcions a continuació.",
+	"bitidchoosefull": "El vostre nom real ($1)",
+	"bitidchooseexisting": "Un compte existent en aquesta wiki",
+	"bitidchoosepassword": "Contrasenya",
+	"bitid-addrs-action": "Acció",
+	"bitid-addrs-delete": "Elimina",
+	"bitid-provider-label-other-username": "Introduïu el vostre $1 nom d'usuari"
+}

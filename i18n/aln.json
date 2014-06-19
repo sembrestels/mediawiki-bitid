@@ -1,0 +1,16 @@
+{
+	"bitiddelete-success": "BitID u hoq me sukses nga llogaria juaj.",
+	"bitiddelete-error": "Gabim gjatë heqjes BitID nga llogaria juaj.",
+	"prefs-bitid-show-bitid": "Fshih URL BitID tuaj në faqen tuaj të përdoruesit, nëse ju hyni në me BitID.",
+	"bitid-userinfo-update-on-login-label": "Update informacionin e mëposhtëm nga persona BitID çdo herë që në hyrje:",
+	"bitid-associated-bitids-label": "BitIDs lidhur me llogarinë tuaj:",
+	"bitid-addrs-action": "Veprim",
+	"bitid-addrs-delete": "Fshij",
+	"bitid-add-url": "Shto një BitID ri",
+	"bitid-login-or-create-account": "Regjistrohu ose hapni një llogari të re",
+	"bitid-provider-label-bitid": "Shkruani URL BitID tuaj",
+	"bitid-provider-label-google": "Hyni në llogarinë tuaj duke përdorur Google",
+	"bitid-provider-label-yahoo": "Hyni ose duke përdorur llogarinë tuaj Yahoo",
+	"bitid-provider-label-aol": "Shkruani AOL screenname tuaj",
+	"bitid-provider-label-other-username": "Fusni emrin e përdoruesit $1"
+}

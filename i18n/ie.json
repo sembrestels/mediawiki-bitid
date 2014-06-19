@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Makuba"
+		]
+	},
+	"bitiderror": "BitID-erra",
+	"bitid-error-bitid-consumer-mode-disabled": "Tu ne posse inregistrar per BitID in ti wiki, proque li BitID-mode de consumers ha esset desactivat.",
+	"bitid-provider-selection-button-login": "Inregistrar per BitID",
+	"right-bitid-create-account-with-bitid": "Crear un conto per BitID",
+	"action-bitid-create-account-without-bitid": "por manualmen crear un conto sin BitID"
+}

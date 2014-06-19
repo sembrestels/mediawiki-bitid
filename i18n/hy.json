@@ -1,0 +1,13 @@
+{
+	"@metadata": {
+		"authors": [
+			"M hamlet"
+		]
+	},
+	"bitiderror": "BitID սխալ",
+	"bitid-provider-selection-button-login-or-create-account": "Մուտք գործել / ստեղծել հաշիվ BitID֊ի միջոցով",
+	"bitid-provider-selection-button-login": "Մուտք գործել BitID֊ի միջոցով",
+	"bitid-provider-selection-button-create-account": "Ստեղծել հաշիվ BitID֊ի միջոցով",
+	"action-bitid-login-with-bitid": "մուտք գործել BitID֊ի միջոցով",
+	"action-bitid-create-account-with-bitid": "ստեղծել հաշիվ BitID֊ի միջոցով"
+}

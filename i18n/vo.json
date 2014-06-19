@@ -1,0 +1,27 @@
+{
+	"@metadata": {
+		"authors": [
+			"Malafaya",
+			"Smeira"
+		]
+	},
+	"bitidxrds": "Ragiv: Yadis",
+	"bitiderror": "Kontrolamapöl",
+	"bitidoptional": "No peflagon",
+	"bitidrequired": "Peflagon",
+	"bitidnickname": "Näinem",
+	"bitidfullname": "Nem lölik",
+	"bitidemail": "Ladet leäktronik",
+	"bitidlanguage": "Pük",
+	"bitidtimezone": "Düpakoun",
+	"bitidchooseinstructions": "Gebans valik neodons näinemi;\nkanol välön bali sökölas.",
+	"bitidchoosefull": "Nem lölik ola ($1)",
+	"bitidchooseauto": "Nem itjäfidiko pejaföl ($1)",
+	"bitidchoosemanual": "Nem fa ol pevälöl:",
+	"bitidchooseexisting": "Kal in vük at dabinöl",
+	"bitidchooseusername": "Gebananem:",
+	"bitidchoosepassword": "Letavöd:",
+	"bitidnousername": "Gebananem nonik pegivon.",
+	"bitidbadusername": "Gebananem no lonöföl pegivon.",
+	"bitid-addrs-delete": "Moükön"
+}

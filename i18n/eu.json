@@ -1,0 +1,21 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kobazulo",
+			"Theklan",
+			"පසිඳු කාවින්ද"
+		]
+	},
+	"bitidserver": "BitID zerbitzaria",
+	"bitidoptional": "Aukerazkoa",
+	"bitidrequired": "Nahitaezkoa",
+	"bitidnickname": "Ezizena",
+	"bitidfullname": "Izen osoa",
+	"bitidemail": "E-posta helbidea",
+	"bitidlanguage": "Hizkuntza",
+	"bitidtimezone": "Ordu-eremua",
+	"bitidchooseusername": "Erabiltzaile izena:",
+	"bitidchoosepassword": "Pasahitza:",
+	"bitid-addrs-action": "Ekintza",
+	"bitid-addrs-delete": "Ezabatu"
+}

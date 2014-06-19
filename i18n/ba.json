@@ -1,0 +1,14 @@
+{
+	"@metadata": {
+		"authors": [
+			"Haqmar"
+		]
+	},
+	"bitidoptional": "Теләккә күрә",
+	"bitidrequired": "Мотлаҡ",
+	"bitidnickname": "Ҡушма исем",
+	"bitidfullname": "Тулы исем",
+	"bitidemail": "Электрон почта адресы",
+	"bitidlanguage": "Тел",
+	"bitidtimezone": "Ваҡыт бүлкәте"
+}
