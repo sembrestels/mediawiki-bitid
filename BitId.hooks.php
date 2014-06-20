@@ -200,6 +200,7 @@ class BitIdHooks {
 		$update[ wfMessage( 'bitidlanguage' )->text() ] = '-language';
 		$update[ wfMessage( 'bitidtimezone' )->text() ] = '-timezone';
 
+		/*
 		$preferences['bitid-userinfo-update-on-login'] =
 			array(
 				'section' => 'bitid/bitid-userinfo-update-on-login',
@@ -207,6 +208,7 @@ class BitIdHooks {
 				'label-message' => 'bitid-userinfo-update-on-login-label',
 				'options' => $update,
 			);
+		*/
 
 		$preferences['bitid-associated-bitids'] =
 			array(

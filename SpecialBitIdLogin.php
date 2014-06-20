@@ -41,15 +41,22 @@ class SpecialBitIdLogin extends SpecialPage {
 		$this->setHeaders();
 		$headers = getallheaders();
 
-		if ($_SESSION['bitid_address'] && $wgUser->getID() != 0) {
-			$this->displaySuccessLogin($_SESSION);
+		$address = $_SESSION['bitid_address'];
+		
+		if ($address && ($user = self::getUserFromAddress($address)) && $user instanceof User) {
+			$wgUser = $user;
+			$this->displaySuccessLogin($_SESSION['bitid_address']);
 			return;
 		} elseif ($wgUser->getID() != 0) {
 			$this->alreadyLoggedIn();
 			return;
 		}
 		if ($_SESSION['bitid_address']) {
-			$this->chooseNameForm($_SESSION['bitid_address']);
+			if ($par == 'ChooseName') {
+				$this->chooseName();
+			} else {
+				$this->chooseNameForm($_SESSION['bitid_address']);
+			}
 			return;
 		}
 
@@ -544,16 +551,17 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 			return;
 		}
 
-		list( $bitid, $sreg, $ax ) = $this->fetchValues();
+		$bitid = $_SESSION['bitid_address'];
+		$data = array();
+		
 		if ( is_null( $bitid ) ) {
-			$this->clearValues();
 			# No messing around, here
 			$wgOut->showErrorPage( 'bitiderror', 'bitiderrortext' );
 			return;
 		}
 
 		if ( $wgRequest->getCheck( 'wpCancel' ) ) {
-			$this->clearValues();
+			unset($_SESSION['bitid_address']);
 			$wgOut->showErrorPage( 'bitidcancel', 'bitidcanceltext' );
 			return;
 		}
@@ -563,50 +571,46 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 
 		if ( $choice == 'existing' ) {
 
-			$user = $this->attachUser( $bitid, $sreg,
+			$user = $this->attachUser( $bitid, $data,
 				$wgRequest->getText( 'wpExistingName' ),
 				$wgRequest->getText( 'wpExistingPassword' )
 			);
 
 			if ( is_null( $user ) || !$user ) {
-
-				$this->clearValues();
-				// $this->chooseNameForm( $bitid, $sreg, $ax, 'wrongpassword' );
+				$this->chooseNameForm( $bitid, null, 'wrongpassword' );
 				return;
 			}
 
+			/*
 			$force = array();
 			foreach ( array( 'fullname', 'nickname', 'email', 'language' ) as $option ) {
 				if ( $wgRequest->getCheck( 'wpUpdateUserInfo' . $option ) ) {
 					$force[] = $option;
 				}
 			}
+			*/
 
-			$this->updateUser( $user, $sreg, $ax );
+			# $this->updateUser( $user, $sreg, $ax );
 
 		} else {
 
-			$name = $this->getUserName( $bitid, $sreg, $ax, $choice, $nameValue );
+			$name = $this->getUserName( $bitid, $data, $choice, $nameValue );
 
 			if ( !$name || !$this->userNameOK( $name ) ) {
-				$this->chooseNameForm( $bitid, $sreg, $ax );
+				$this->chooseNameForm( $bitid );
 				return;
 			}
 
-			$user = $this->createUser( $bitid, $sreg, $ax, $name );
-
+			$user = $this->createUser( $bitid, null, $name );
 		}
 
 		if ( is_null( $user ) ) {
-
-			$this->clearValues();
 			$wgOut->showErrorPage( 'bitiderror', 'bitiderrortext' );
 			return;
-
 		}
 
 		$wgUser = $user;
-		$this->clearValues();
+		unset($_SESSION['bitid_address']);
 		$this->displaySuccessLogin( $bitid );
 	}
 	
@@ -621,6 +625,7 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 		$this->setupSession();
 		RequestContext::getMain()->setUser( $wgUser );
 		$wgUser->SetCookies();
+		unset($_SESSION['bitid_address']);
 
 		# Run any hooks; ignore results
 		$inject_html = '';
@@ -658,4 +663,162 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 		$returntoquery = isset( $_SESSION['bitid_returntoquery'] ) ? $_SESSION['bitid_returntoquery'] : '';
 		return array( $returnto, $returntoquery );
 	}
+	
+	/**
+	 * @param $bitid
+	 * @param $data
+	 * @param $name
+	 * @param $password
+	 * @return bool|null|User
+	 */
+	function attachUser( $bitid, $data = array(), $name, $password ) {
+		global $wgAuth;
+
+		$user = User::newFromName( $name );
+
+		if ( $user->checkPassword( $password ) ) {
+
+			// de-validate the temporary password
+			$user->setNewPassword( null );
+			MediawikiBitId::addUserAddress( $user, $bitid );
+
+			return $user;
+
+		}
+
+		if ( $user->checkTemporaryPassword( $password ) ) {
+
+			$wgAuth->updateUser( $user );
+			$user->saveSettings();
+
+			$reset = new SpecialChangePassword();
+			$reset->setContext( $this->getContext()->setUser( $user ) );
+			$reset->execute( null );
+
+			return null;
+
+		}
+
+		return null;
+
+	}
+
+	
+	/**
+	 * @param $bitid
+	 * @param $data
+	 * @param $choice
+	 * @param $nameValue
+	 * @return mixed|null|string
+	 */
+	function getUserName( $bitid, $data, $choice, $nameValue ) {
+		global $wgBitIdAllowNewAccountname;
+
+		switch ( $choice ) {
+		/*
+		case 'nick':
+		 	if ( $wgBitIdProposeUsernameFromSREG ) {
+				return ( ( array_key_exists( 'nickname', $sreg ) ) ? $sreg['nickname'] : null );
+			}
+			break;
+		case 'full':
+			if ( !$wgBitIdProposeUsernameFromSREG ) {
+				return;
+			}
+		 	# check the SREG first; only return a value if non-null
+			$fullname = ( ( array_key_exists( 'fullname', $sreg ) ) ? $sreg['fullname'] : null );
+			if ( !is_null( $fullname ) ) {
+			 	return $fullname;
+			}
+
+			# try AX
+			$fullname = ( ( array_key_exists( 'http://axschema.org/namePerson/first', $ax )
+				|| array_key_exists( 'http://axschema.org/namePerson/last', $ax ) ) ?
+				$ax['http://axschema.org/namePerson/first'][0] . " " . $ax['http://axschema.org/namePerson/last'][0] : null
+			);
+
+			return $fullname;
+		case 'url':
+			if ( $wgBitIdProposeUsernameFromSREG ) {
+				return $this->toUserName( $bitid );
+			}
+			break;
+		*/
+		case 'manual':
+			if ( $wgBitIdAllowNewAccountname ) {
+				return $nameValue;
+			}
+		 default:
+			return null;
+		}
+	}
+	
+	function createUser( $bitid, $data, $name ) {
+		global $wgUser, $wgAuth;
+
+		# Check permissions of the creating $wgUser
+		if ( !$wgUser->isAllowed( 'createaccount' )
+			|| !$wgUser->isAllowed( 'bitid-create-account-with-bitid' ) ) {
+			wfDebug( "BitID: User is not allowed to create an account.\n" );
+			return null;
+		} elseif ( $wgUser->isBlockedFromCreateAccount() ) {
+			wfDebug( "BitID: User is blocked.\n" );
+			return null;
+		}
+
+		$user = User::newFromName( $name );
+
+		if ( !$user ) {
+			wfDebug( "BitID: Error adding new user.\n" );
+			return null;
+		}
+
+		$user->addToDatabase();
+
+		if ( !$user->getId() ) {
+			wfDebug( "BitID: Error adding new user.\n" );
+		} else {
+			$wgAuth->initUser( $user );
+			$wgAuth->updateUser( $user );
+
+			$wgUser = $user;
+
+			# new user account: not opened by mail
+   			wfRunHooks( 'AddNewAccount', array( $user, false ) );
+			$user->addNewUserLogEntry();
+
+			# Update site stats
+			$ssUpdate = new SiteStatsUpdate( 0, 0, 0, 0, 1 );
+			$ssUpdate->doUpdate();
+
+			MediawikiBitId::addUserAddress( $user, $bitid );
+			//$this->updateUser( $user, $data, true );
+			$user->saveSettings();
+			return $user;
+		}
+	}
+	
+	/**
+	 * Is this name OK to use as a user name?
+	 */
+	function userNameOK( $name ) {
+		global $wgReservedUsernames;
+		return ( 0 == User::idFromName( $name ) &&
+				!in_array( $name, $wgReservedUsernames ) );
+	}
+	
+	protected function setupSession() {
+		if ( session_id() == '' ) {
+			wfSetupSession();
+		}
+	}
+	
+	/**
+	 * @param $bitid
+	 */
+	function loginSetCookie( $bitid ) {
+		global $wgRequest, $wgBitIdCookieExpiration;
+		$wgRequest->response()->setcookie( 'BitID', $bitid, time() +  $wgBitIdCookieExpiration );
+	}
+
 }

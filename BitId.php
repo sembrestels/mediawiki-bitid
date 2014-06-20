@@ -21,6 +21,7 @@
 
 $wgBitIdAllowExistingAccountSelection = true;
 $wgBitIdAllowNewAccountname = true;
+$wgBitIdCookieExpiration = 365 * 24 * 60 * 60;
 
 $wgExtensionCredits['other'][] = array(
 	'path' => __FILE__,
@@ -147,5 +148,22 @@ class MediawikiBitId {
 
 
 	}
+	
+	/**
+	 * @param $user User
+	 * @param $url string
+	 */
+	public static function addUserAddress( $user, $address ) {
+		$dbw = wfGetDB( DB_MASTER );
 
+		$dbw->insert(
+			'bitid_users',
+			array(
+				'uoi_user' => $user->getId(),
+				'uoi_bitid' => $address,
+				'uoi_user_registration' => $dbw->timestamp()
+			),
+			__METHOD__
+		);
+	}
 }
