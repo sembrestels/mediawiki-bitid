@@ -29,17 +29,14 @@ class BitIdHooks {
 
 		}
 
-		/*
 		if ( !$wgUser->isLoggedIn()
 			&& ( $wgUser->isAllowed( 'bitid-login-with-bitid' )
 				|| $wgUser->isAllowed( 'bitid-create-account-with-bitid' ) ) ) {
 			$addBitIdSpecialPagesList[] = 'Login';
 		}
-		*/
 
-		$addBitIdSpecialPagesList[] = 'Login';
-		#$addBitIdSpecialPagesList[] = 'Convert';
-		#$addBitIdSpecialPagesList[] = 'Dashboard';
+		$addBitIdSpecialPagesList[] = 'Convert';
+		$addBitIdSpecialPagesList[] = 'Dashboard';
 
 		# add the server-related Special pages
 

@@ -19,14 +19,16 @@
  * along with Extension:BitId.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+$wgBitIdLoginOnly = false;
 $wgBitIdAllowExistingAccountSelection = true;
 $wgBitIdAllowNewAccountname = true;
 $wgBitIdCookieExpiration = 365 * 24 * 60 * 60;
 
+define( 'MEDIAWIKI_BITID_VERSION', '0.1.0' );
 $wgExtensionCredits['other'][] = array(
 	'path' => __FILE__,
 	'name' => 'BitId',
-	'version' => 0.1,
+	'version' => MEDIAWIKI_BITID_VERSION,
 	'author' => 'David Llop',
 	'url' => 'https://www.mediawiki.org/wiki/Extension:BitId',
 	'descriptionmsg' => 'bitid-desc'
@@ -46,8 +48,12 @@ $wgMessagesDirs['BitId'] = __DIR__ . '/i18n';
 $wgExtensionMessagesFiles['BitIdAlias'] = __DIR__ . "/BitId.alias.php";
 
 $wgAutoloadClasses['SpecialBitIdLogin'] = __DIR__ . '/SpecialBitIdLogin.php';
+$wgAutoloadClasses['SpecialBitIdConvert'] = __DIR__ . '/SpecialBitIdConvert.php';
+$wgAutoloadClasses['SpecialBitIdDashboard'] = __DIR__ . '/SpecialBitIdDashboard.php';
 $wgAutoloadClasses['BitIdHooks'] = __DIR__ . '/BitId.hooks.php';
 $wgSpecialPages['BitIdLogin'] = 'SpecialBitIdLogin';
+$wgSpecialPages['BitIdConvert'] = 'SpecialBitIdConvert';
+$wgSpecialPages['BitIdDashboard'] = 'SpecialBitIdDashboard';
 
 
 # new user rights
@@ -119,6 +125,28 @@ class MediawikiBitId {
 		return $bitid_addrs_registration;
 	}
 	
+	/**
+	 * 
+	 * @param String $address
+	 * @return null|User
+	 */
+	public static function getUserFromAddress($address) {
+		
+		$dbr = wfGetDB( DB_SLAVE );
+
+		$id = $dbr->selectField(
+			'bitid_users',
+			'uoi_user',
+			array( 'uoi_bitid' => $address ),
+			__METHOD__
+		);
+
+		if ( $id ) {
+			return User::newFromId( $id );
+		} else {
+			return null;
+		}
+	}
 	
 	/**
 	 * @return string
@@ -165,5 +193,25 @@ class MediawikiBitId {
 			),
 			__METHOD__
 		);
+	}
+	
+	/**
+	 * @param $user User
+	 * @param $url string
+	 * @return bool
+	 */
+	public static function removeUserAddress( $user, $url ) {
+		$dbw = wfGetDB( DB_MASTER );
+
+		$dbw->delete(
+			'bitid_users',
+			array(
+				'uoi_user' => $user->getId(),
+				'uoi_bitid' => $url
+			),
+			__METHOD__
+		);
+
+		return (bool)$dbw->affectedRows();
 	}
 }

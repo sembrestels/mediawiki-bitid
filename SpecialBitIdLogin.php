@@ -30,7 +30,9 @@ require_once dirname(__FILE__) . "/vendors/BitID.php";
  */
 class SpecialBitIdLogin extends SpecialPage {
 	function __construct() {
-		parent::__construct('BitIdLogin');
+		global $wgUser;
+		$listed = !$wgUser->isLoggedIn();
+		parent::__construct('BitIdLogin', 'bitid-login-with-bitid', $listed);
 		$this->bitid = new BitID();
 	}
 	function execute($par) {
@@ -39,11 +41,10 @@ class SpecialBitIdLogin extends SpecialPage {
 		$request = $this->getRequest();
 		$output = $this->getOutput();
 		$this->setHeaders();
-		$headers = getallheaders();
 
 		$address = isset($_SESSION['bitid_address'])? $_SESSION['bitid_address'] : false;
 		
-		if ($address && ($user = self::getUserFromAddress($address)) && $user instanceof User) {
+		if ($address && ($user = MediawikiBitId::getUserFromAddress($address)) && $user instanceof User) {
 			$wgUser = $user;
 			$this->displaySuccessLogin($_SESSION['bitid_address']);
 			return;
@@ -60,10 +61,19 @@ class SpecialBitIdLogin extends SpecialPage {
 			return;
 		}
 
+		$bitid_uri = self::executeBitId($output, $request, $this->getTitle()->getFullUrl());
+
+		self::main_view($output, $bitid_uri);
+		self::manual_view($output, $bitid_uri, $this->getTitle()->getLocalUrl());
+	}
+	
+	static function executeBitId($output, $request, $bitid_callback_uri) {
+		$headers = getallheaders();
+		$bitid = new BitID();
 		if ($request->getText('ajax')) {
-			$this->ajax();
+			self::ajax();
 		} elseif ($request->getText('uri') || isset($headers['Content-Type']) && $headers['Content-Type'] == 'application/json') {
-			$this->callback(array(
+			self::callback(array(
 				'uri' => $request->getText('uri'),
 				'address' => $request->getText('address'),
 				'signature' => $request->getText('signature'),
@@ -71,19 +81,17 @@ class SpecialBitIdLogin extends SpecialPage {
 			$output->redirect(Title::newFromText('Special:BitIdLogin')->getFullURL());
 		}
 
-		$nonce = (isset($_SESSION['bitid_nonce']))? $_SESSION['bitid_nonce'] : $this->bitid->generateNonce();
+		$nonce = (isset($_SESSION['bitid_nonce']))? $_SESSION['bitid_nonce'] : $bitid->generateNonce();
 
-		$bitid_callback_uri = Title::newFromText('Special:BitIdLogin')->getFullURL();
-		$bitid_uri = $this->bitid->buildURI($bitid_callback_uri, $nonce);
-		$this->save_nonce($nonce);
-
-		$this->main_view($output, $bitid_uri);
-		$this->manual_view($output, $bitid_uri);
+		$bitid_uri = $bitid->buildURI($bitid_callback_uri, $nonce);
+		self::save_nonce($nonce);
+		return $bitid_uri;
 	}
 	
-	private function main_view($output, $bitid_uri) {
+	static function main_view($output, $bitid_uri) {
 	
-		$bitid_qr = $this->bitid->qrCode($bitid_uri);
+		$bitid = new BitID();
+		$bitid_qr = $bitid->qrCode($bitid_uri);
 	
 		$output->addHTML('<span id="qr-code">');
 		
@@ -94,14 +102,14 @@ You can also click on the QRcode if you have a BitID enabled desktop wallet.");
 		$output->addHTML(
 "<a href=\"$bitid_uri\"><img alt=\"Click on QRcode to activate compatible desktop wallet\" border=\"0\" src=\"$bitid_qr\" /></a>");
 
-		$output->addWikiText("No compatible wallet? Use [[Special:BitIdLogin#bitid-manual-signing | manual signing]].");
+		$output->addWikiText("No compatible wallet? Use [[#bitid-manual-signing | manual signing]].");
 		
-		$output->addHTML(HTML::hidden('nonce', $this->bitid->extractNonce($bitid_uri)));
+		$output->addHTML(HTML::hidden('nonce', $bitid->extractNonce($bitid_uri)));
 		
 		$output->addHTML('</span>');
 	}
 	
-	private function manual_view($output, $bitid_uri) {
+	static function manual_view($output, $bitid_uri, $action_uri) {
 		$output->addHTML('<span id="manual-signing" style="display:none">');
 		
 		$output->addWikiText(		
@@ -112,7 +120,6 @@ Please sign the challenge in the box below using the private key of this Bitcoin
 
 Cumbersome. Yep. Much better with a simple scan or click using a compatible wallet :)");
 
-		$action_uri = Title::newFromText('Special:BitIdLogin')->getFullURL();
 		$output->addHTML("<form action=\"$action_uri\">");
 
 		$output->addHTML('<p>'.HTML::input('uri', $bitid_uri, 'text', array('readonly' => 'readonly', 'style' => 'width:450px')).'</p>');
@@ -125,17 +132,18 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 
 		$output->addHTML('<p>'.HTML::input('signin', 'Sign in!', 'submit').'</p>');
 
-		$output->addWikiText("Back to [[Special:BitIdLogin#bitid-qr-code | QR code]].");
+		$output->addWikiText("Back to [[#bitid-qr-code | QR code]].");
 		
 		$output->addHTML('</form>');
 		
 		$output->addHTML('</span>');
 	}
 	
-	private function callback($variables) {
+	static function callback($variables) {
 
 		header('Access-Control-Allow-Origin: *');
 		$post_data = json_decode(file_get_contents('php://input'), true);
+		$bitid = new BitID();
 		// SIGNED VIA PHONE WALLET (data is send as payload)
 		if($post_data!==null) {
 			$variables = $post_data;
@@ -143,8 +151,8 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 		$uri = urldecode($variables['uri']);
 
 		// ALL THOSE VARIABLES HAVE TO BE SANITIZED !
-		$signValid = $this->bitid->isMessageSignatureValidSafe($variables['address'], $variables['signature'], $uri, true);
-		$nonce = $this->bitid->extractNonce($uri);
+		$signValid = $bitid->isMessageSignatureValidSafe($variables['address'], $variables['signature'], $uri, true);
+		$nonce = $bitid->extractNonce($uri);
 		$signValid = true; // For testing porpouses
 		if($signValid) {
 			$dbw = wfGetDB(DB_MASTER);
@@ -156,7 +164,7 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 			} else {
 				// SIGNED MANUALLY (data is stored in $_POST+$_REQUEST vs payload)
 				// SHOW SOMETHING PRETTY TO THE USER
-				$this->login($variables['address']);
+				static::login($variables['address']);
 			}
 		} else {
 			header("HTTP/1.0 401 Unauthorized");
@@ -164,64 +172,42 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 		}
 	}
 	
-	private function ajax() {
+	static function ajax() {
 		// check if this nonce is logged or not
 		$dbr = wfGetDB(DB_SLAVE);
 		$_address = $dbr->select('bitid_nonces', array('address'), array('nonce' => $_POST['nonce']));
+		$address = null;
 		foreach ($_address as $addr) {
 			$address = $addr->address;
 		}
 		if($address) {
 			// Create session so the user could log in
-			$this->login($address);
+			static::login($address);
 		}
 		//return address/false to tell the VIEW it could log in now or not
 		echo json_encode($address);
 		exit();
 	}
 	
-	private function save_nonce($nonce) {
+	static function save_nonce($nonce) {
 		$_SESSION['bitid_nonce'] = $nonce;
 		$dbw = wfGetDB( DB_MASTER );
 		$dbw->insert('bitid_nonces', array('nonce'=> $nonce), __METHOD__, array('IGNORE'));
 	}
 	
-	private function login($address, $data = array()) {
+	static function login($address, $data = array()) {
 		global $wgUser;
 		
 		unset($_SESSION['bitid_nonce']);
 		$_SESSION['bitid_address'] = $address;
 		
-		$user = self::getUserFromAddress($address);
+		$user = MediawikiBitId::getUserFromAddress($address);
 
 		if ($user instanceof User) {
 			# $this->updateUser($user, $data); # update from wallet
 			$wgUser = $user;
 		} else {
 			# $this->saveValues($address, $data);
-		}
-	}
-	
-	/**
-	 * 
-	 * @param String $address
-	 * @return null|User
-	 */
-	private static function getUserFromAddress($address) {
-		
-		$dbr = wfGetDB( DB_SLAVE );
-
-		$id = $dbr->selectField(
-			'bitid_users',
-			'uoi_user',
-			array( 'uoi_bitid' => $address ),
-			__METHOD__
-		);
-
-		if ( $id ) {
-			return User::newFromId( $id );
-		} else {
-			return null;
 		}
 	}
 	
@@ -636,7 +622,7 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 
 		# Set a cookie for later check-immediate use
 
-		$this->loginSetCookie( $address );
+		self::loginSetCookie( $address );
 
 		$wgOut->setPageTitle( wfMessage( 'bitidsuccess' )->text() );
 		$wgOut->setRobotPolicy( 'noindex,nofollow' );
@@ -819,7 +805,7 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 	/**
 	 * @param $bitid
 	 */
-	function loginSetCookie( $bitid ) {
+	static function loginSetCookie( $bitid ) {
 		global $wgRequest, $wgBitIdCookieExpiration;
 		$wgRequest->response()->setcookie( 'BitID', $bitid, time() +  $wgBitIdCookieExpiration );
 	}
