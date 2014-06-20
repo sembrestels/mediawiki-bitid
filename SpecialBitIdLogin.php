@@ -148,12 +148,10 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 		if($post_data!==null) {
 			$variables = $post_data;
 		}
-		$uri = urldecode($variables['uri']);
 
 		// ALL THOSE VARIABLES HAVE TO BE SANITIZED !
-		$signValid = $bitid->isMessageSignatureValidSafe($variables['address'], $variables['signature'], $uri, true);
-		$nonce = $bitid->extractNonce($uri);
-		$signValid = true; // For testing porpouses
+		$signValid = $bitid->isMessageSignatureValidSafe($variables['address'], $variables['signature'], $variables['uri']);
+		$nonce = $bitid->extractNonce($variables['uri']);
 		if($signValid) {
 			$dbw = wfGetDB(DB_MASTER);
 			$dbw->update('bitid_nonces', array('address' => $variables['address']), array('nonce' => $nonce));
