@@ -41,7 +41,7 @@ class SpecialBitIdLogin extends SpecialPage {
 		$this->setHeaders();
 		$headers = getallheaders();
 
-		$address = $_SESSION['bitid_address'];
+		$address = isset($_SESSION['bitid_address'])? $_SESSION['bitid_address'] : false;
 		
 		if ($address && ($user = self::getUserFromAddress($address)) && $user instanceof User) {
 			$wgUser = $user;
@@ -51,11 +51,11 @@ class SpecialBitIdLogin extends SpecialPage {
 			$this->alreadyLoggedIn();
 			return;
 		}
-		if ($_SESSION['bitid_address']) {
+		if ($address) {
 			if ($par == 'ChooseName') {
 				$this->chooseName();
 			} else {
-				$this->chooseNameForm($_SESSION['bitid_address']);
+				$this->chooseNameForm($address);
 			}
 			return;
 		}
@@ -140,11 +140,11 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 		if($post_data!==null) {
 			$variables = $post_data;
 		}
+		$uri = urldecode($variables['uri']);
 
 		// ALL THOSE VARIABLES HAVE TO BE SANITIZED !
-
-		$signValid = $this->bitid->isMessageSignatureValidSafe($variables['address'], $variables['signature'], $variables['uri'], true);
-		$nonce = $this->bitid->extractNonce(urldecode($variables['uri']));
+		$signValid = $this->bitid->isMessageSignatureValidSafe($variables['address'], $variables['signature'], $uri, true);
+		$nonce = $this->bitid->extractNonce($uri);
 		$signValid = true; // For testing porpouses
 		if($signValid) {
 			$dbw = wfGetDB(DB_MASTER);
@@ -158,6 +158,9 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 				// SHOW SOMETHING PRETTY TO THE USER
 				$this->login($variables['address']);
 			}
+		} else {
+			header("HTTP/1.0 401 Unauthorized");
+			exit();
 		}
 	}
 	
