@@ -39,7 +39,7 @@ class SpecialBitIdConvert extends SpecialPage {
 	}
 
 	function execute( $par ) {
-		global $wgRequest, $wgUser, $wgOut, $wgBitIdProviders, $wgBitIdForcedProvider;
+		global $wgRequest, $wgUser, $wgOut;
 
 		if ( !$this->userCanExecute( $wgUser ) ) {
 			$this->displayRestrictionError();
@@ -76,7 +76,7 @@ class SpecialBitIdConvert extends SpecialPage {
 	}
 
 	function convert( $bitid_url ) {
-		global $wgUser, $wgOut, $wgRequest;
+		global $wgUser, $wgOut;
 
 		# Expand Interwiki
 		#$bitid_url = $this->interwikiExpand( $bitid_url );
@@ -104,30 +104,22 @@ class SpecialBitIdConvert extends SpecialPage {
 			return;
 		}
 
-		// If we're OK to here, let the user go log in
+		// If we're OK to here, let the user log in
 		SpecialBitIdLogin::login($bitid_url);
 		$wgOut->redirect(Title::newFromText('Special:BitIdConvert/Finish')->getFullURL());
 
 	}
 
 	function form($bitid_uri) {
-		global $wgOut, $wgUser;
+		global $wgOut;
 
 		$wgOut->addHTML(
-			Html::rawElement( 'form',
-				array(
-					'id' => 'bitid_form',
-					'action' => $this->getTitle()->getLocalUrl(),
-					'method' => 'post',
-					'onsubmit' => 'bitid.update()'
-				),
-				Xml::fieldset( wfMessage( 'bitidconvertoraddmoreids' )->text() ) .
-				Html::element( 'p',
-					array(),
-					wfMessage( 'bitidconvertinstructions' )->text()
-				) .
-				Xml::closeElement( 'fieldset' )
-			)
+			Xml::fieldset( wfMessage( 'bitidconvertoraddmoreids' )->text() ) .
+			Html::element( 'p',
+				array(),
+				wfMessage( 'bitidconvertinstructions' )->text()
+			) .
+			Xml::closeElement( 'fieldset' )
 		);
 		
 		SpecialBitIdLogin::main_view($wgOut, $bitid_uri);

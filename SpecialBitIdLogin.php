@@ -36,7 +36,7 @@ class SpecialBitIdLogin extends SpecialPage {
 		$this->bitid = new BitID();
 	}
 	function execute($par) {
-		global $wgRequest, $wgUser, $wgOut;
+		global $wgUser;
 
 		$request = $this->getRequest();
 		$output = $this->getOutput();
@@ -46,7 +46,7 @@ class SpecialBitIdLogin extends SpecialPage {
 		
 		if ($address && ($user = MediawikiBitId::getUserFromAddress($address)) && $user instanceof User) {
 			$wgUser = $user;
-			$this->displaySuccessLogin($_SESSION['bitid_address']);
+			$this->displaySuccessLogin($address);
 			return;
 		} elseif ($wgUser->getID() != 0) {
 			$this->alreadyLoggedIn();
@@ -78,7 +78,7 @@ class SpecialBitIdLogin extends SpecialPage {
 				'address' => $request->getText('address'),
 				'signature' => $request->getText('signature'),
 			));
-			$output->redirect(Title::newFromText('Special:BitIdLogin')->getFullURL());
+			$output->redirect($bitid_callback_uri);
 		}
 
 		$nonce = (isset($_SESSION['bitid_nonce']))? $_SESSION['bitid_nonce'] : $bitid->generateNonce();
