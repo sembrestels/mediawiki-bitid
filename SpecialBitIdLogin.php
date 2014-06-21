@@ -154,7 +154,9 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 		$nonce = $bitid->extractNonce($variables['uri']);
 		if($signValid) {
 			$dbw = wfGetDB(DB_MASTER);
+			$dbw->begin();
 			$dbw->update('bitid_nonces', array('address' => $variables['address']), array('nonce' => $nonce));
+			$dbw->commit();
 
 			// SIGNED VIA PHONE WALLET (data was sent as payload)
 			if($post_data!==null) {
@@ -174,6 +176,7 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 		// check if this nonce is logged or not
 		$dbr = wfGetDB(DB_SLAVE);
 		$_address = $dbr->select('bitid_nonces', array('address'), array('nonce' => $_POST['nonce']));
+		//$dbr->close();
 		$address = null;
 		foreach ($_address as $addr) {
 			$address = $addr->address;
@@ -190,13 +193,23 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 	static function save_nonce($nonce) {
 		$_SESSION['bitid_nonce'] = $nonce;
 		$dbw = wfGetDB( DB_MASTER );
+		$dbw->begin();
 		$dbw->insert('bitid_nonces', array('nonce'=> $nonce), __METHOD__, array('IGNORE'));
+		$dbw->commit();
+	}
+	
+	static function delete_nonce() {
+		$dbw = wfGetDB( DB_MASTER );
+		$dbw->begin();
+		$dbw->delete('bitid_nonces', array('nonce'=> $_SESSION['bitid_nonce']));
+		$dbw->commit();
+		unset($_SESSION['bitid_nonce']);
 	}
 	
 	static function login($address, $data = array()) {
 		global $wgUser;
 		
-		unset($_SESSION['bitid_nonce']);
+		self::delete_nonce();
 		$_SESSION['bitid_address'] = $address;
 		
 		$user = MediawikiBitId::getUserFromAddress($address);
