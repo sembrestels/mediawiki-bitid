@@ -4,10 +4,10 @@
 
 The MediaWiki **minium** version is 1.23.0.
 
-Also, make sure you have the GMP extension for PHP. In Debian/Ubuntu install:
+Also, make sure you have the GMP and GD extensions for PHP. In Debian/Ubuntu install:
 
 ```sh
-$ sudo apt-get install php5-gmp
+$ sudo apt-get install php5-gmp php5-gd
 ```
 
 ### Installation
