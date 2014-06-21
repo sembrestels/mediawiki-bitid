@@ -192,6 +192,9 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 	}
 	
 	static function save_nonce($nonce) {
+		if (session_status() == PHP_SESSION_NONE) {
+			session_start();
+		}
 		$_SESSION['bitid_nonce'] = $nonce;
 		$dbw = wfGetDB( DB_MASTER );
 		$dbw->begin();
