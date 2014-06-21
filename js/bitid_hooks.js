@@ -13,7 +13,7 @@ jQuery(function($) {
 	if ($('#qr-code').length) {
 		setInterval(function() {
 			var r = new XMLHttpRequest();
-			r.open("POST", location.href+'/ajax', true);
+			r.open("POST", location.href, true);
 			r.onreadystatechange = function () {
 				if (r.readyState != 4 || r.status != 200) return;
 				if(r.responseText!='null') {
@@ -21,7 +21,7 @@ jQuery(function($) {
 				}
 			};
 			r.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-			r.send("nonce="+$('input[name="nonce"]').val());
+			r.send("ajax=true&nonce="+$('input[name="nonce"]').val());
 		}, 3000);
 	}
 });

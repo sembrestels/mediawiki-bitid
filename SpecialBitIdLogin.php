@@ -71,7 +71,7 @@ class SpecialBitIdLogin extends SpecialPage {
 	static function executeBitId($par, $output, $request, $bitid_callback_uri) {
 		$headers = getallheaders();
 		$bitid = new BitID();
-		if ($par == 'ajax') {
+		if ($request->getText('ajax')) {
 			self::ajax();
 		} elseif ($par == 'callback') {
 			self::callback(array(
