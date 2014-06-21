@@ -61,18 +61,19 @@ class SpecialBitIdLogin extends SpecialPage {
 			return;
 		}
 
-		$bitid_uri = self::executeBitId($output, $request, $this->getTitle()->getFullUrl());
+		$bitid_callback_uri = $this->getTitle()->getFullUrl();
+		$bitid_uri = self::executeBitId($par, $output, $request, $bitid_callback_uri);
 
 		self::main_view($output, $bitid_uri);
-		self::manual_view($output, $bitid_uri, $this->getTitle()->getLocalUrl());
+		self::manual_view($output, $bitid_uri, $bitid_callback_uri);
 	}
 	
-	static function executeBitId($output, $request, $bitid_callback_uri) {
+	static function executeBitId($par, $output, $request, $bitid_callback_uri) {
 		$headers = getallheaders();
 		$bitid = new BitID();
-		if ($request->getText('ajax')) {
+		if ($par == 'ajax') {
 			self::ajax();
-		} elseif ($request->getText('uri') || isset($headers['Content-Type']) && $headers['Content-Type'] == 'application/json') {
+		} elseif ($par == 'callback') {
 			self::callback(array(
 				'uri' => $request->getText('uri'),
 				'address' => $request->getText('address'),
@@ -83,7 +84,7 @@ class SpecialBitIdLogin extends SpecialPage {
 
 		$nonce = (isset($_SESSION['bitid_nonce']))? $_SESSION['bitid_nonce'] : $bitid->generateNonce();
 
-		$bitid_uri = $bitid->buildURI($bitid_callback_uri, $nonce);
+		$bitid_uri = $bitid->buildURI($bitid_callback_uri.'/callback', $nonce);
 		self::save_nonce($nonce);
 		return $bitid_uri;
 	}
@@ -120,7 +121,7 @@ Please sign the challenge in the box below using the private key of this Bitcoin
 
 Cumbersome. Yep. Much better with a simple scan or click using a compatible wallet :)");
 
-		$output->addHTML("<form action=\"$action_uri\">");
+		$output->addHTML("<form action=\"$action_uri/callback\">");
 
 		$output->addHTML('<p>'.HTML::input('uri', $bitid_uri, 'text', array('readonly' => 'readonly', 'style' => 'width:450px')).'</p>');
 		

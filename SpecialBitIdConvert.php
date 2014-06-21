@@ -62,7 +62,7 @@ class SpecialBitIdConvert extends SpecialPage {
 
 		default:
 			
-			$bitid_uri = SpecialBitIdLogin::executeBitId($wgOut, $wgRequest, $this->getTitle()->getFullUrl());
+			$bitid_uri = SpecialBitIdLogin::executeBitId($par, $wgOut, $wgRequest, $this->getTitle()->getFullUrl());
 
 			$address = isset($_SESSION['bitid_address']) ? $_SESSION['bitid_address'] : null;
 
