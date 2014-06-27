@@ -78,7 +78,7 @@ class SpecialBitIdLogin extends SpecialPage {
 				'uri' => $request->getText('uri'),
 				'address' => $request->getText('address'),
 				'signature' => $request->getText('signature'),
-			));
+			), $bitid_callback_uri);
 			$output->redirect($bitid_callback_uri);
 		}
 
@@ -140,7 +140,7 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 		$output->addHTML('</span>');
 	}
 	
-	static function callback($variables) {
+	static function callback($variables, $bitid_callback_uri) {
 
 		header('Access-Control-Allow-Origin: *');
 		$post_data = json_decode(file_get_contents('php://input'), true);
@@ -153,7 +153,14 @@ Cumbersome. Yep. Much better with a simple scan or click using a compatible wall
 		// ALL THOSE VARIABLES HAVE TO BE SANITIZED !
 		$signValid = $bitid->isMessageSignatureValidSafe($variables['address'], $variables['signature'], $variables['uri']);
 		$nonce = $bitid->extractNonce($variables['uri']);
-		if($signValid) {
+
+		/* check nonce and uri */
+		$dbr = wfGetDB(DB_SLAVE);
+		$nonce_exists = $dbr->select('bitid_nonces', array('address'), array('nonce' => $nonce));
+		$bitid_uri = $bitid->buildURI($bitid_callback_uri.'/callback', $nonce);
+
+
+		if($signValid && $nonce_exists && ($variables['uri'] === $bitid_uri)) {
 			$dbw = wfGetDB(DB_MASTER);
 			$dbw->begin();
 			$dbw->update('bitid_nonces', array('address' => $variables['address']), array('nonce' => $nonce));
