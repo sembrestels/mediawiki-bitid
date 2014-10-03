@@ -2,7 +2,7 @@
 
 ### Requirements
 
-The MediaWiki **minium** version is 1.23.0.
+The MediaWiki **minimum** version is 1.23.0.
 
 Also, make sure you have the GMP and GD extensions for PHP. In Debian/Ubuntu install:
 
